@@ -45,6 +45,10 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
         return view('content.honor.honor-dasar');
     })->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
 
+    Route::get('/honor/dasar/pribadi', function(){
+        return view('content.honor.honor-dasar-pribadi');
+    })->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
+
     Route::get('/account/detail', function(){
         return view('content.account.detail-account');
     })->name('account.detail');
