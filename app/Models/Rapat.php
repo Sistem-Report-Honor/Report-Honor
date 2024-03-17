@@ -19,7 +19,6 @@ class Rapat extends Model
         'tanggal',
         'jam',
         'qr_code',
-        'id_golongan',
         'time_expired',
     ];
 
