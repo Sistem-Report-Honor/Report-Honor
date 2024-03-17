@@ -1,70 +1,64 @@
 @extends('dashboard')
 
 @section('content')
-    <!--
-  Heads up! 👋
+<div class="grid grid-flow-col grid-cols-3">
+  @foreach ($rapats as $rapat)
+  <div class="w-80 p-4 bg-white rounded-lg">
+      <img src="{{ asset($rapat->qr_code) }}" alt="QR Code" class="h-fit w-fit rounded-md object-cover" />
 
-  This component comes with some `rtl` classes. Please remove them if they are not needed in your project.
--->
+      <div class="mt-2">
+          <dl>
+              <div>
+                  <dd class="font-medium">{{ $rapat->nama }}</dd>
+              </div>
+          </dl>
 
-<div class="overflow-x-auto">
-    <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
-      <thead class="ltr:text-left rtl:text-right">
-        <tr>
-          <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Name</th>
-          <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Date of Birth</th>
-          <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Role</th>
-          <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Salary</th>
-          <th class="px-4 py-2"></th>
-        </tr>
-      </thead>
-  
-      <tbody class="divide-y divide-gray-200">
-        <tr>
-          <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">John Doe</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">24/05/1995</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">Web Developer</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">$120,000</td>
-          <td class="whitespace-nowrap px-4 py-2">
-            <a
-              href="#"
-              class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-            >
-              View
-            </a>
-          </td>
-        </tr>
-  
-        <tr>
-          <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Jane Doe</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">04/11/1980</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">Web Designer</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">$100,000</td>
-          <td class="whitespace-nowrap px-4 py-2">
-            <a
-              href="#"
-              class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-            >
-              View
-            </a>
-          </td>
-        </tr>
-  
-        <tr>
-          <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Gary Barlow</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">24/05/1995</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">Singer</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">$20,000</td>
-          <td class="whitespace-nowrap px-4 py-2">
-            <a
-              href="#"
-              class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-            >
-              View
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <div class="mt-6 flex items-center gap-8 text-xs">
+              <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+                  {{-- <svg class="size-4 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                  </svg> --}}
+
+                  <div class="mt-1.5 sm:mt-0">
+                      <p class="text-gray-500">Tanggal</p>
+
+                      <p class="font-medium">{{ $rapat->tanggal }}</p>
+                  </div>
+              </div>
+
+              <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+                  {{-- <svg class="size-4 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg> --}}
+
+                  <div class="mt-1.5 sm:mt-0">
+                      <p class="text-gray-500">Jam Dimulai</p>
+
+                      <p class="font-medium">{{ $rapat->jam }}</p>
+                  </div>
+              </div>
+
+              <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+                  {{-- <svg class="size-4 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg> --}}
+
+                  <div class="mt-1.5 sm:mt-0">
+                      <p class="text-gray-500">Kadaluarsa</p>
+
+                      <p class="font-medium">{{ $rapat->time_expired }}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
+@endforeach
+</div>
+    
 @endsection

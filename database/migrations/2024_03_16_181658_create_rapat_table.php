@@ -15,6 +15,7 @@ class CreateRapatTable extends Migration
     {
         Schema::create('rapat', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
             $table->string('kode_unik')->unique();
             $table->date('tanggal');
             $table->time('jam');
