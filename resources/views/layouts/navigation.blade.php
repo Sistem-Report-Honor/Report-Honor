@@ -56,7 +56,7 @@
                     </summary>
 
                     <ul class="mt-2 space-y-1 px-4">
-                        <x-responsive-nav-link :href="route('list.user')" :active="request()->routeIs('list.user')">
+                        <x-responsive-nav-link :href="route('table.user')" :active="request()->routeIs('table.user')">
                             {{ __('User List') }}
                         </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('form.user')" :active="request()->routeIs('form.user')">

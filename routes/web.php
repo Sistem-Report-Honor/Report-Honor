@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,13 +22,9 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
         return view('content.dashboard');
     })->name('dashboard');
 
-    Route::get('/user', function(){
-        return view('content.user.table-user');
-    })->middleware(['role:admin'])->name('list.user');
-
-    Route::get('/user/form', function(){
-        return view('content.user.form-user');
-    })->middleware(['role:admin'])->name('form.user');
+    Route::get('/user/table',[UserController::class, 'table'])->middleware(['role:admin'])->name('table.user');
+    Route::get('/user/form',[UserController::class, 'form'] )->middleware(['role:admin'])->name('form.user');
+    
 
     Route::get('/rapat', function(){
         return view('content.rapat.table-rapat');

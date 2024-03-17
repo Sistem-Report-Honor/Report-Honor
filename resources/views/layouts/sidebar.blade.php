@@ -28,7 +28,7 @@
 
                             <ul class="mt-2 space-y-1 px-4">
                                 <li>
-                                    <a href="{{ route('list.user') }}"
+                                    <a href="{{ route('table.user') }}"
                                         class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                                         User List
                                     </a>
