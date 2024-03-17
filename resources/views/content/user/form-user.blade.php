@@ -1,97 +1,83 @@
 @extends('dashboard')
 
 @section('content')
-<div class="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
-    <form action="#" class="space-y-4">
-      <div>
-        <label class="sr-only" for="name">Name</label>
-        <input
-          class="w-full rounded-lg border-gray-200 p-3 text-sm"
-          placeholder="Name"
-          type="text"
-          id="name"
-        />
-      </div>
+    <div class="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
+        <!-- Session Status -->
+        <x-auth-session-status class="mb-4" :status="session('succes')" />
 
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <label class="sr-only" for="email">Email</label>
-          <input
-            class="w-full rounded-lg border-gray-200 p-3 text-sm"
-            placeholder="Email address"
-            type="email"
-            id="email"
-          />
-        </div>
+        <!-- Validation Errors -->
+        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        
+        <form action="{{ route('post.user') }}" method="POST" class="space-y-4">
+            @csrf
+            <div>
+                <label class="sr-only" for="name">Name</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Name" type="text"
+                    id="name" name="name" required />
+            </div>
 
-        <div>
-          <label class="sr-only" for="phone">Phone</label>
-          <input
-            class="w-full rounded-lg border-gray-200 p-3 text-sm"
-            placeholder="Phone Number"
-            type="tel"
-            id="phone"
-          />
-        </div>
-      </div>
+            <div>
+                <label class="sr-only" for="email">Email</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Email address" type="email"
+                    id="email" name="email" required />
+            </div>
 
-      <div class="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
-        <div>
-          <label
-            for="Option1"
-            class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
-            tabindex="0"
-          >
-            <input class="sr-only" id="Option1" type="radio" tabindex="-1" name="option" />
+            <div>
+                <label class="sr-only" for="password">password</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="password" type="password"
+                    id="password" name="password" required />
+            </div>
 
-            <span class="text-sm"> Option 1 </span>
-          </label>
-        </div>
+            <div>
+                <label class="sr-only" for="nip">NIP</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="NIP" type="text" id="nip"
+                    name="nip" required />
+            </div>
 
-        <div>
-          <label
-            for="Option2"
-            class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
-            tabindex="0"
-          >
-            <input class="sr-only" id="Option2" type="radio" tabindex="-1" name="option" />
+            <div>
+                <label class="sr-only" for="no_rek">No. Rek</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="No. Rek" type="text"
+                    id="no_rek" name="no_rek" required />
+            </div>
 
-            <span class="text-sm"> Option 2 </span>
-          </label>
-        </div>
+            <div>
+                <label class="sr-only" for="nama_rekening">Nama Rekening</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Nama Rekening" type="text"
+                    id="nama_rekening" name="nama_rekening" required />
+            </div>
 
-        <div>
-          <label
-            for="Option3"
-            class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
-            tabindex="0"
-          >
-            <input class="sr-only" id="Option3" type="radio" tabindex="-1" name="option" />
+            <div>
+                <label class="sr-only">Golongan</label>
+                @foreach ($golongans as $golongan)
+                    <label for="golongan{{ $golongan->id }}" class="inline-flex items-center">
+                        <input type="radio" id="golongan{{ $golongan->id }}" name="id_golongan" value="{{ $golongan->id }}">
+                        <span class="ml-2">{{ $golongan->golongan }}</span>
+                    </label>
+                @endforeach
+            </div>
 
-            <span class="text-sm"> Option 3 </span>
-          </label>
-        </div>
-      </div>
+            <div>
+                <label class="sr-only" for="jabatan">Jabatan</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Jabatan" type="text"
+                    id="jabatan" name="jabatan" required />
+            </div>
 
-      <div>
-        <label class="sr-only" for="message">Message</label>
+            <div>
+                <label class="sr-only" for="role">Role</label>
+                <select id="role" name="role" class="w-full rounded-lg border-gray-200 p-3 text-sm">
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-        <textarea
-          class="w-full rounded-lg border-gray-200 p-3 text-sm"
-          placeholder="Message"
-          rows="8"
-          id="message"
-        ></textarea>
-      </div>
 
-      <div class="mt-4">
-        <button
-          type="submit"
-          class="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto"
-        >
-          Send Enquiry
-        </button>
-      </div>
-    </form>
-  </div>
+            <div class="mt-4">
+                <button type="submit"
+                    class="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto">
+                    {{ __('Create') }}
+                </button>
+            </div>
+        </form>
+    </div>
 @endsection

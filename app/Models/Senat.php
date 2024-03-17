@@ -12,6 +12,7 @@ class Senat extends Model
     protected $table = 'senat';
 
     protected $fillable = [
+        'name',
         'nip',
         'no_rek',
         'nama_rekening',
@@ -22,7 +23,7 @@ class Senat extends Model
     // Relasi ke tabel User
     public function user()
     {
-        return $this->belongsTo(User::class, 'id', 'id_senat');
+        return $this->belongsTo(User::class, 'id_senat');
     }
 
     // Relasi ke tabel Golongan

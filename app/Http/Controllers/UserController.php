@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function table(){
-        $user = User::with('');
+        $user = User::with(['senat']);
         return view('content.user.table-user',['users' => $user]);
     }
 
@@ -22,7 +22,7 @@ class UserController extends Controller
             
         ]);
         $user = User::create([
-            
+
         ]);
     }
 }
