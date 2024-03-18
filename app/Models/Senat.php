@@ -17,7 +17,8 @@ class Senat extends Model
         'no_rek',
         'nama_rekening',
         'id_golongan',
-        'jabatan'
+        'jabatan',
+        'NPWP',
     ];
 
     // Relasi ke tabel User
