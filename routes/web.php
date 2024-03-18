@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(function () {
     Route::get('/dashboard', function () {
         return view('content.dashboard');
