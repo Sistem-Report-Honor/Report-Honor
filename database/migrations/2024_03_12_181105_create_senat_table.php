@@ -17,6 +17,7 @@ class CreateSenatTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('nip');
+            $table->string('npwp');
             $table->string('no_rek')->unique();
             $table->string('nama_rekening');
             $table->unsignedBigInteger('id_golongan');

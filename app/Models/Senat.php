@@ -14,11 +14,12 @@ class Senat extends Model
     protected $fillable = [
         'name',
         'nip',
+        'npwp',
         'no_rek',
         'nama_rekening',
         'id_golongan',
+        'id_komisi',
         'jabatan',
-        'NPWP',
     ];
 
     // Relasi ke tabel User
@@ -31,5 +32,10 @@ class Senat extends Model
     public function golongan()
     {
         return $this->belongsTo(Golongan::class, 'id_golongan');
+    }
+
+    public function komisi()
+    {
+        return $this->belongsTo(Komisi::class, 'id_komisi');
     }
 }
