@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Golongan;
+use App\Models\Komisi;
 
-class GolonganSeeder extends Seeder
+class KomisiSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,17 +15,18 @@ class GolonganSeeder extends Seeder
     public function run()
     {
         // Menyimpan data Golongan ke dalam database
-        Golongan::create([
-            'golongan' => 'Golongan III',
-            'honor' => 223684.00,
-            'pph' => 11184.00,
+        Komisi::create([
+            'komisi' => 'Akademik',
             // tambahkan field lain sesuai dengan kebutuhan
         ]);
 
-        Golongan::create([
-            'golongan' => 'Golongan IV',
-            'honor' => 250000.00,
-            'pph' => 37500.00,
+        Komisi::create([
+            'komisi' => 'Etika',
+            // tambahkan field lain sesuai dengan kebutuhan
+        ]);
+
+        Komisi::create([
+            'komisi' => 'Kerjasama',
             // tambahkan field lain sesuai dengan kebutuhan
         ]);
 

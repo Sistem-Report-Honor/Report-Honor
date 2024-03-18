@@ -17,9 +17,9 @@
             </div>
 
             <div>
-                <label class="sr-only" for="email">Email</label>
-                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Email address" type="email"
-                    id="email" name="email" required />
+                <label class="sr-only" for="user">Username</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Username" type="text"
+                    id="user" name="user" required />
             </div>
 
             <div>
@@ -54,6 +54,15 @@
                         <span class="ml-2">{{ $golongan->golongan }}</span>
                     </label>
                 @endforeach
+            </div>
+
+            <div>
+                <label for="id_komisi" class="komisi">Komisi</label>
+                <select id="id_komisi" name="id_komisi" class="w-full rounded-lg border-gray-200 p-3 text-sm">
+                    @foreach ($komisis as $komisi)
+                        <option value="{{ $komisi->id }}">{{ $komisi->komisi }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>

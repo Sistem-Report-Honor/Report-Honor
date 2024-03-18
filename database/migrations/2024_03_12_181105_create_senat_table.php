@@ -20,6 +20,7 @@ class CreateSenatTable extends Migration
             $table->string('no_rek')->unique();
             $table->string('nama_rekening');
             $table->unsignedBigInteger('id_golongan');
+            $table->unsignedBigInteger('id_komisi');
             $table->string('jabatan');
             $table->timestamps();
             // Menambahkan kunci asing ke kolom 'id_golongan'

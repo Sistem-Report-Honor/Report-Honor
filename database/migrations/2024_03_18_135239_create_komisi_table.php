@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGolonganTable extends Migration
+class CreateKomisiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateGolonganTable extends Migration
      */
     public function up()
     {
-        Schema::create('golongan', function (Blueprint $table) {
+        Schema::create('komisi', function (Blueprint $table) {
             $table->id();
-            $table->string('golongan');
-            $table->decimal('honor', 10, 2);
-            $table->decimal('pph', 8, 2);
-
+            $table->string('komisi');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -31,10 +27,6 @@ class CreateGolonganTable extends Migration
      */
     public function down()
     {
-        Schema::table('senat', function (Blueprint $table) {
-            $table->dropForeign(['id_golongan']);
-        });
-
-        Schema::dropIfExists('golongan');
+        Schema::dropIfExists('komisi');
     }
 }

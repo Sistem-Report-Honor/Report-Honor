@@ -7,7 +7,7 @@
                 <tr>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Name</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">NIP</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Email</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Username</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Jabatan</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"></th>
                 </tr>
