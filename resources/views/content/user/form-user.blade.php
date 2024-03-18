@@ -47,6 +47,12 @@
             </div>
 
             <div>
+                <label class="sr-only" for="NPWP">NPWP</label>
+                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="No NPWP" type="text"
+                    id="NPWP" name="NPWP" required />
+            </div>
+
+            <div>
                 <label class="sr-only">Golongan</label>
                 @foreach ($golongans as $golongan)
                     <label for="golongan{{ $golongan->id }}" class="inline-flex items-center">

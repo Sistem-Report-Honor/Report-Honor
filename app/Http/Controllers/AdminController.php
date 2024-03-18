@@ -52,6 +52,7 @@ class AdminController extends Controller
             'id_golongan' => $request->id_golongan,
             'id_komisi' => $request->id_komisi,
             'jabatan' => $request->jabatan,
+            'NPWP' => $request->NPWP,
             // Isi kolom lainnya sesuai kebutuhan
         ]);
 
