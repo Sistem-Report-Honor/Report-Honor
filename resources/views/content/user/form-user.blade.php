@@ -17,15 +17,23 @@
             </div>
 
             <div>
-                <label class="sr-only" for="user">Username</label>
+                <label class="sr-only" for="username">Username</label>
                 <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Username" type="text"
-                    id="user" name="user" required />
+                    id="username" name="username" required />
             </div>
 
             <div>
-                <label class="sr-only" for="password">password</label>
-                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="password" type="password"
+                <label class="sr-only" for="password">Password</label>
+                <div class="relative">
+                    <input class="w-full rounded-lg border-gray-200 p-3 text-sm pr-10" placeholder="Password" type="password"
                     id="password" name="password" required />
+                <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 px-4 py-2 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </button>
+                </div>
             </div>
 
             <div>
@@ -95,4 +103,18 @@
             </div>
         </form>
     </div>
+
+        <!-- Script untuk toggle password -->
+    <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            // Ubah ikon untuk menampilkan atau menyembunyikan kata sandi
+            this.classList.toggle('text-black');
+            this.classList.toggle('text-gray-600');
+        });
+    </script>
 @endsection
