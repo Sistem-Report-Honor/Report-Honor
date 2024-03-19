@@ -12,7 +12,7 @@
             <input type="date" id="tanggal" name="tanggal"><br><br>
             <label for="jam">Jam Rapat:</label><br>
             <input type="time" id="jam" name="jam"><br><br>
-            <button type="submit">Buat QR Code</button>
+            <button type="submit" classname="btn btn-primary">Buat QR Code</button>
         </form>
     </div>
 @endsection

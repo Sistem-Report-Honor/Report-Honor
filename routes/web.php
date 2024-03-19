@@ -54,7 +54,7 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
         return view('content.account.change-password');
     })->name('change.password');
 
-    Route::get('/absen/{kode_unik}', function(){
+    Route::get('/absen/{kode_unik?}', function(){
         return view('content.absen.absen');
     })->middleware(['role:anggota|pimpinan'])->name('absen');
 });

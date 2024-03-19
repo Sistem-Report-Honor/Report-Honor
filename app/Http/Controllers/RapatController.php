@@ -31,7 +31,8 @@ class RapatController extends Controller
         $url = route('absen', [$kode_unik]);
 
         // Nama file untuk menyimpan QR code
-        $filename = $request->nama . '.png';
+        $filename = $request->nama . '-' . $kode_unik . '.png';
+        $filename = str_replace(' ', '-', $filename);
         $filepath = 'QRCode/' . $filename;
         // Membuat QR code
         QRCode::url($url . '?code=' . $kode_unik)
