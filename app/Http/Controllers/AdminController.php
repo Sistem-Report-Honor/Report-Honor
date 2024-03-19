@@ -24,7 +24,7 @@ class AdminController extends Controller
         $golongans = Golongan::all();
         $komisis = Komisi::all();
         $roles = Role::all();
-        return view('content.user.form-user',['golongans' => $golongans, 'komisis' => $komisis, 'roles'=>$roles]);
+        return view('content.user.form-user', ['golongans' => $golongans, 'komisis' => $komisis, 'roles' => $roles]);
     }
 
     public function create(Request $request)
@@ -35,6 +35,7 @@ class AdminController extends Controller
             'username' => 'required|unique:users',
             'password' => 'required',
             'nip' => 'required|string|max:18|unique:senat',
+            'NPWP' => 'required|string|max:18|unique:senat',
             'no_rek' => 'required|unique:senat|string',
             'nama_rekening' => 'required|string',
             'id_golongan' => 'required|exists:golongan,id',
@@ -67,6 +68,29 @@ class AdminController extends Controller
         $user->assignRole($request->role);
 
         // Redirect atau lakukan tindakan lainnya setelah berhasil membuat record
-        return redirect()->back()->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('table.user')->with('success', 'User berhasil ditambahkan.');
+    }
+
+    public function edit($id)
+    {
+        $user =  User::where('id', $id)->with('senat')->first();
+        $golongan = Golongan::all();
+        $komisi = Komisi::all();
+        $role = Role::all();
+        return view('content.user.edit-user', ['user' => $user, 'golongans' => $golongan, 'komisis' => $komisi, 'roles' => $role]);
+    }
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+        $senat =  Senat::find($user->id_senat);
+        if (!$user && !$senat){
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        $user->delete();
+        $senat->delete();
+
+        return response()->json(['message' => 'Data deleted successfully'], 200);
     }
 }
