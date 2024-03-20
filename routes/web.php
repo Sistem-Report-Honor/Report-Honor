@@ -21,6 +21,7 @@ Route::get('/', function () {
 });
 
 Route::get('/absen/{kode_unik}/{id_komisi}',[AbsenController::class,'absen'])->name('absen');
+Route::post('/absen',[AbsenController::class,'kehadiran'])->name('hadir');
 
 Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(function () {
     Route::get('/dashboard', function () {
@@ -37,6 +38,8 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
     Route::get('/rapat/form', [RapatController::class,'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
     Route::post('/rapat/form/create',[RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
     Route::get('/rapat/kehadiran/{id}', [RapatController::class,'kehadiran'])->middleware(["role:admin|pimpinan"])->name('kehadiran.rapat');
+    Route::post('/rapat/{id}/status/mulai',[RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
+    Route::post('/rapat/{id}/status/selesai',[RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
 
     Route::get('/honor/detail', function () {
         return view('content.honor.honor-detail');

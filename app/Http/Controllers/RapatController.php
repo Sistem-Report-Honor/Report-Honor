@@ -37,7 +37,7 @@ class RapatController extends Controller
         $filename = str_replace(' ', '-', $filename);
         $filepath = 'QRCode/' . $filename;
         // Membuat QR code
-        QRCode::url($url . '?code=' . $kode_unik .'&&komisi='. $request->id_komisi)
+        QRCode::url($url . '?code=' . $kode_unik.'&komisi='.$request->id_komisi)
             ->setSize(8)
             ->setMargin(2)
             ->setOutfile(storage_path('app/public/' . $filepath))
@@ -55,11 +55,26 @@ class RapatController extends Controller
             'status' => 'prepare',
             'time_expired' => $expirationTime,
         ]);
-        return redirect()->route('list.rapat')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('list.rapat')->with('success', 'QR berhasil Dibuat.');
     }
 
     public function kehadiran($id){
         $kehadiran = Kehadiran::where('id_rapat',$id)->get();
         return view('content.rapat.kehadiran',['kehadirans' => $kehadiran]);
+    }
+
+    public function statusMulai($id){
+        $rapat = Rapat::findOrFail($id);
+        $rapat->status = 'mulai';
+        $rapat->save();
+
+        return redirect()->route('list.rapat')->with('success', 'rapat berhasil Di Mulai');
+    }
+    public function statusSelesai($id){
+        $rapat = Rapat::findOrFail($id);
+        $rapat->status = 'selesai';
+        $rapat->save();
+
+        return redirect()->route('list.rapat')->with('success', 'rapat berhasil Di akhiri');
     }
 }
