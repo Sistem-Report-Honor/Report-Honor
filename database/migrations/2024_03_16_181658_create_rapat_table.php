@@ -20,7 +20,7 @@ class CreateRapatTable extends Migration
             $table->date('tanggal');
             $table->time('jam');
             $table->string('qr_code');
-            $table->enum('status', ['mulai', 'selesai']);
+            $table->enum('status', ['Berlangsung', 'Selesai']);
             $table->dateTime('time_expired')->nullable();
 
             $table->timestamps();

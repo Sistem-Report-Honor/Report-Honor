@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RapatController;
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/absen/{kode_unik}',[AbsenController::class,'absen'])->name('absen');
+
 Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(function () {
     Route::get('/dashboard', function () {
         return view('content.dashboard');
@@ -33,6 +37,7 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
     Route::get('/rapat', [RapatController::class, 'table'])->middleware(['role:admin|pimpinan'])->name('list.rapat');
     Route::get('/rapat/form', [RapatController::class,'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
     Route::post('/rapat/form/create',[RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
+    Route::get('/rapat/kehadiran/{id}', [RapatController::class,'kehadiran'])->middleware(["role:admin|pimpinan"])->name('kehadiran.rapat');
 
     Route::get('/honor/detail', function(){
         return view('content.honor.honor-detail');
@@ -54,9 +59,7 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
         return view('content.account.change-password');
     })->name('change.password');
 
-    Route::get('/absen/{kode_unik}', function(){
-        return view('content.absen.absen');
-    })->middleware(['role:anggota|pimpinan'])->name('absen');
+    
 });
 
 

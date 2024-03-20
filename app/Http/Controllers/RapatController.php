@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kehadiran;
 use Carbon\Carbon;
 use App\Models\Rapat;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class RapatController extends Controller
             'jam' => 'required',
         ]);
         $kode_unik = uniqid();
-        $url = route('absen', [$kode_unik]);
+        $url = route('absen', $kode_unik);
 
         // Nama file untuk menyimpan QR code
         $filename = $request->nama . '.png';
@@ -49,9 +50,14 @@ class RapatController extends Controller
             'tanggal' =>$request->tanggal,
             'jam' => $request->jam,
             'qr_code' =>  $filepath, 
-            'status' => 'mulai',
+            'status' => 'Berlangsung',
             'time_expired' => $expirationTime,
         ]);
         return redirect()->back()->with('success', 'User berhasil ditambahkan.');
+    }
+
+    public function kehadiran($id){
+        $kehadiran = Kehadiran::where('id_rapat',$id)->get();
+        return view('content.rapat.kehadiran',['kehadirans' => $kehadiran]);
     }
 }
