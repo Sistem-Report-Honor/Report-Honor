@@ -2,27 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Senat;
 use App\Models\User;
+use App\Models\Senat;
+use App\Models\Kehadiran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function table(){
-        $user = User::with(['senat']);
-        return view('content.user.table-user',['users' => $user]);
+    public function kehadiran(){
+        $id = Auth::user()->id_senat;
+        $datas =  Kehadiran::where('id_senat',$id)->get();
+        return view('content.absen.kehadiran-user',['datas'=>$datas]);
     }
 
-    public function form(){
-        return view('content.user.form-user');
+    public function password(){
+        return view('content.account.change-password');
     }
 
-    public function create(Request $request){
-        $senat = Senat::create([
-            
-        ]);
-        $user = User::create([
-
-        ]);
+    public function detail(Request $request){
+        return view('content.account.detail-account');
     }
 }

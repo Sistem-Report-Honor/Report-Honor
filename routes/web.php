@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RapatController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/absen/{kode_unik}/{id_komisi}',[AbsenController::class,'absen'])->name('absen');
-Route::post('/absen',[AbsenController::class,'kehadiran'])->name('hadir');
+Route::get('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'absen'])->name('absen');
+Route::post('/absen', [AbsenController::class, 'kehadiran'])->name('hadir');
 
-Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(function () {
+Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(function () {
     Route::get('/dashboard', function () {
         return view('content.dashboard');
     })->name('dashboard');
@@ -35,11 +36,11 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
     Route::delete('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
 
     Route::get('/rapat', [RapatController::class, 'table'])->middleware(['role:admin|pimpinan'])->name('list.rapat');
-    Route::get('/rapat/form', [RapatController::class,'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
-    Route::post('/rapat/form/create',[RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
-    Route::get('/rapat/kehadiran/{id}', [RapatController::class,'kehadiran'])->middleware(["role:admin|pimpinan"])->name('kehadiran.rapat');
-    Route::post('/rapat/{id}/status/mulai',[RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
-    Route::post('/rapat/{id}/status/selesai',[RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
+    Route::get('/rapat/form', [RapatController::class, 'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
+    Route::post('/rapat/form/create', [RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
+    Route::get('/rapat/kehadiran/{id}', [RapatController::class, 'kehadiran'])->middleware(["role:admin|pimpinan"])->name('kehadiran.rapat');
+    Route::post('/rapat/{id}/status/mulai', [RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
+    Route::post('/rapat/{id}/status/selesai', [RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
 
     Route::get('/honor/detail', function () {
         return view('content.honor.honor-detail');
@@ -53,15 +54,11 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
         return view('content.honor.honor-dasar-pribadi');
     })->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
 
-    Route::get('/account/detail', function () {
-        return view('content.account.detail-account');
-    })->name('account.detail');
+    Route::get('/absen/user', [UserController::class, 'index'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
 
-    Route::get('/account/change_password', function () {
-        return view('content.account.change-password');
-    })->name('change.password');
+    Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
 
-    
+    Route::get('/account/change_password', [UserController::class, 'password'])->name('change.password');
 });
 
 

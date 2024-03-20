@@ -140,7 +140,7 @@
                         </x-responsive-nav-link>
                     </ul>
                 </details>
-                <x-responsive-nav-link :href="route('absen')" :active="request()->routeIs('absen')">
+                <x-responsive-nav-link :href="route('kehadiran.user')" :active="request()->routeIs('kehadiran.user')">
                     {{ __('Absen') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')">
@@ -174,7 +174,7 @@
                 </details>
             @endif
             @if (Auth::user()->hasRole('anggota'))
-                <x-responsive-nav-link :href="route('absen')" :active="request()->routeIs('absen')">
+                <x-responsive-nav-link :href="route('kehadiran.user')" :active="request()->routeIs('kehadiran.user')">
                     {{ __('Absen') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')">
