@@ -194,21 +194,21 @@
                     </span>
                 </summary>
 
-                <ul class="mt-2 space-y-1 px-4">
-                    <x-responsive-nav-link :href="route('list.rapat')" :active="request()->routeIs('list.rapat')">
-                        {{ __('Rapat List') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('form.rapat')" :active="request()->routeIs('form.rapat')">
-                        {{ __('Rapat Create') }}
-                    </x-responsive-nav-link>
-                </ul>
-            </details>
-            <x-responsive-nav-link :href="route('absen')" :active="request()->routeIs('absen')">
-                {{ __('Absen') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')">
-                {{ __('Honor Dasar Pribadi') }}
-            </x-responsive-nav-link>
+                    <ul class="mt-2 space-y-1 px-4">
+                        <x-responsive-nav-link :href="route('list.rapat')" :active="request()->routeIs('list.rapat')">
+                            {{ __('Rapat List') }}
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('form.rapat')" :active="request()->routeIs('form.rapat')">
+                            {{ __('Rapat Create') }}
+                        </x-responsive-nav-link>
+                    </ul>
+                </details>
+                <x-responsive-nav-link :href="route('absen')" :active="request()->routeIs('absen')">
+                    {{ __('Absen') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')">
+                    {{ __('Honor Dasar Pribadi') }}
+                </x-responsive-nav-link>
             @endif
             @if (Auth::user()->hasRole('keuangan'))
             <details class="group [&_summary::-webkit-details-marker]:hidden">
@@ -233,12 +233,12 @@
             </details>
             @endif
             @if (Auth::user()->hasRole('anggota'))
-            <x-responsive-nav-link :href="route('absen')" :active="request()->routeIs('absen')">
-                {{ __('Absen') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')">
-                {{ __('Honor Dasar Pribadi') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('absen')" :active="request()->routeIs('absen')">
+                    {{ __('Absen') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')">
+                    {{ __('Honor Dasar Pribadi') }}
+                </x-responsive-nav-link>
             @endif
         </div>
 

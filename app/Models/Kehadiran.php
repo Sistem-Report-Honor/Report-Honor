@@ -14,6 +14,7 @@ class Kehadiran extends Model
      *
      * @var array
      */
+    protected $table = 'kehadiran';
     protected $fillable = [
         'id_rapat',
         'id_senat',

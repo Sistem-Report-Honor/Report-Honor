@@ -18,7 +18,7 @@ class CreateKehadiranTable extends Migration
             $table->unsignedBigInteger('id_rapat');
             $table->unsignedBigInteger('id_senat');
             $table->dateTime('waktu');
-            $table->enum('verifikasi', ['Hadir', 'Tidak Hadir']);
+            $table->enum('verifikasi', ['Absen','Hadir', 'Tidak Hadir']);
 
             // Menambahkan kunci asing ke kolom 'id_rapat' pada tabel 'rapat'
             $table->foreign('id_rapat')->references('id')->on('rapat')->onDelete('cascade');
