@@ -56,7 +56,7 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
         return view('content.honor.honor-dasar-pribadi');
     })->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
 
-    Route::get('/absen/user', [UserController::class, 'index'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
+    Route::get('/absen/user', [UserController::class, 'kehadiran'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
 
     Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
 
