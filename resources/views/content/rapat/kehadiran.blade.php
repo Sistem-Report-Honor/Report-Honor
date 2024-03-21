@@ -1,6 +1,11 @@
 @extends('dashboard')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div class="pb-4 bg-white">
             <label for="table-search" class="sr-only">Search</label>
@@ -18,13 +23,13 @@
             </div>
         </div>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b-4">
                 <tr>
                     <th scope="col" class="p-4">
                         <div class="flex items-center">
                             <input id="checkbox-all-search" type="checkbox"
                                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                            <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                            <label for="checkbox-all-search" class="px-2">ALL</label>
                         </div>
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -65,77 +70,53 @@
                         </td>
                         <td class="px-4 py-4">
                             @if ($kehadiran->verifikasi == 'Hadir' || $kehadiran->verifikasi == 'Tidak Hadir')
-                                Sudah Di Verifikasi
+                                <span>Sudah Diverifikasi</span>
                             @else
-                                <div class="flex gap-2">
-                                    <div>
-                                        <form
-                                            action="{{ route('verif', ['id_rapat' => $kehadiran->id_rapat, 'id_senat' => $kehadiran->id_senat]) }}"
-                                            method="POST">
-                                            @csrf
-                                            <input type="hidden" name="status" value="Hadir">
-                                            <button type="submit"
-                                                onclick="return confirm('Apakah Benar {{ $kehadiran->senat->name }} hadir?')"
-                                                class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-green-700">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="size-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m4.5 12.75 6 6 9-13.5" />
-                                                </svg>
-                                            </button>
-                                        </form>
-
-                                    </div>
-                                    <div>
-                                        <form
-                                            action="{{ route('verif', ['id_rapat' => $kehadiran->id_rapat, 'id_senat' => $kehadiran->id_senat]) }}"
-                                            method="POST">
-                                            @csrf
-                                            <input type="hidden" name="status" value="Tidak Hadir">
-                                            <button type="submit"
-                                                onclick="return confirm('Apakah Benar {{ $kehadiran->senat->name }} tidak hadir?')"
-                                                class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="size-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M6 18 18 6M6 6l12 12" />
-                                                </svg>
-
-                                            </button>
-                                        </form>
-                                    </div>
+                                <span>Belum Diverifikasi</span>
                             @endif
 
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
-    </td>
-    </tr>
-    @endforeach
-    </tbody>
-    </table>
-    </div>
-    <div class="mt-4 flex">
+    @if (Auth::user()->hasRole('pimpinan'))    
+    <div class="flex flex-row gap-2 items-start p-4">
         <!-- Tampilkan jumlah item yang dipilih di sini -->
-        <span id="selected-count">0</span> item dipilih
-        <form action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST">
-            @csrf
-            <div class="mt-4">
-                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                <select name="status" id="status" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="Hadir">Hadir</option>
-                    <option value="Tidak Hadir">Tidak Hadir</option>
-                </select>
-            </div>
-            <input type="hidden" id="selected-senats" name="selected_senats" value="">
-            <button type="submit" onclick="return confirm('Apakah Anda yakin?')"
-                class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-green-700 mr-2">
-                Verify
-            </button>
-        </form>
+        <p class="basis-1/8 text-sm font-medium text-gray-700"><span id="selected-count">0</span> item dipilih</p>
+        <div class="grid">
+            <form action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST">
+                @csrf
+                <div class="">
+                    <select name="status" id="status" required
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="Hadir">Hadir</option>
+                        <option value="Tidak Hadir">Tidak Hadir</option>
+                    </select>
+                    <input type="hidden" id="selected-senats" name="selected_senats" value="">
+                </div>
+                <div class="mt-2">
+                    <button type="submit" onclick="return confirm('Apakah Anda yakin?')"
+                        class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-green-700 mr-2">
+                        Verify
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+    @endif
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const checkboxAll = document.getElementById('checkbox-all-search');
             const checkboxes = document.querySelectorAll('.checkbox-kehadiran');
             const selectedCountSpan = document.getElementById('selected-count');
+
+            checkboxAll.addEventListener('change', function() {
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = checkboxAll.checked;
+                });
+            });
 
             checkboxes.forEach(function(checkbox) {
                 checkbox.addEventListener('change', function() {

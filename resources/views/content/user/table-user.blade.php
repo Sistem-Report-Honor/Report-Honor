@@ -2,6 +2,17 @@
 
 @section('content')
     <div class="overflow-x-auto">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
             <thead>
                 <tr>
