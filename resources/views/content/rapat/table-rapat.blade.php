@@ -10,7 +10,7 @@
                 <div class="mt-2">
                     <dl>
                         <div>
-                            <dd class="font-medium">{{ $rapat->komisi->komisi }}</dd>
+                            <dd class="font-medium">Rapat {{ $rapat->komisi->komisi }}</dd>
                         </div>
                     </dl>
 

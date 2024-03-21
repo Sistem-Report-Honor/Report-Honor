@@ -59,7 +59,6 @@
                                     <div>
                                         <form id="deleteForm" action="{{ route('delete.user', $user->id) }}" method="POST">
                                             @csrf
-                                            @method('DELETE')
                                             <button type="submit"
                                                 onclick="return confirm('Are you sure you want to delete this user?')"
                                                 class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700">

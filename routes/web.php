@@ -39,6 +39,8 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/rapat/form', [RapatController::class, 'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
     Route::post('/rapat/form/create', [RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
     Route::get('/rapat/kehadiran/{id}', [RapatController::class, 'kehadiran'])->middleware(["role:admin|pimpinan"])->name('kehadiran.rapat');
+    Route::post('/rapat/kehadiran/{id_rapat}/{id_senat}',[AbsenController::class, 'verif'])->middleware(['role:pimpinan|admin'])->name('verif');
+    Route::post('/rapat/kehadiran/{id_rapat}',[AbsenController::class,'verif_selected'])->middleware('role:admin|pimpinan')->name('verif.selected');
     Route::post('/rapat/{id}/status/mulai', [RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
     Route::post('/rapat/{id}/status/selesai', [RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
 

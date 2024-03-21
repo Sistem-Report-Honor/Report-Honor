@@ -42,7 +42,7 @@ class AbsenController extends Controller
         // Periksa apakah kata sandi yang diberikan sama dengan kata sandi pengguna
         if (Hash::check($request->password, $user->password)) {
             // Periksa apakah id_senat sudah ada dalam tabel Kehadiran
-            if (Kehadiran::where('id_senat', $request->id_senat)->exists()) {
+            if (Kehadiran::where(['id_senat'=> $request->id_senat ,'id_rapat'=>$request->kode_unik])->exists()) {
                 return response()->json(['error' => 'Kehadiran sudah dicatat sebelumnya'], 400);
             }
 
@@ -51,7 +51,7 @@ class AbsenController extends Controller
                 'id_rapat' => $rapat->id,
                 'id_senat' => $request->id_senat,
                 'waktu' => now(),
-                'verifikasi' => ''
+                'verifikasi' => 'Absen'
             ]);
             return response()->json(['message' => 'Kehadiran berhasil dicatat'], 200);
         } else {
@@ -59,4 +59,37 @@ class AbsenController extends Controller
             return response()->json(['error' => 'Kata sandi salah'], 401);
         }
     }
+
+    public function verif(Request $request, $id_rapat, $id_senat){
+        if($request->status == 'Hadir'){
+            Kehadiran::where(['id_rapat'=>$id_rapat, 'id_senat'=>$id_senat])->update([
+                'verifikasi'=>$request->status]);
+
+            return redirect()->back()->with('succes','Verifikasi Berhasil');
+        }else if($request->status == 'Tidak Hadir'){
+            Kehadiran::where(['id_rapat'=>$id_rapat, 'id_senat'=>$id_senat])->update([
+                'verifikasi'=>$request->status]);
+
+            return redirect()->back()->with('succes','Verifikasi Berhasil');
+        }
+    }
+
+    public function verif_selected(Request $request, $id_rapat) {
+        $status = $request->input('status');
+    
+        if ($status == 'Hadir' || $status == 'Tidak Hadir') {
+            $selectedSenats = explode(',', $request->input('selected_senats'));
+    
+            Kehadiran::whereIn('id_senat', $selectedSenats)
+                ->where('id_rapat', $id_rapat)
+                ->update(['verifikasi' => $status]);
+    
+            return redirect()->back()->with('success', 'Verifikasi Berhasil');
+        }
+    
+        // Handle jika status tidak valid
+    
+        return redirect()->back()->with('error', 'Status tidak valid');
+    }
+    
 }

@@ -59,8 +59,9 @@ class RapatController extends Controller
     }
 
     public function kehadiran($id){
-        $kehadiran = Kehadiran::where('id_rapat',$id)->get();
-        return view('content.rapat.kehadiran',['kehadirans' => $kehadiran]);
+        $kehadirans = Kehadiran::where('id_rapat',$id)->get();
+        $rapat = Kehadiran::where('id_rapat',$id)->first();
+        return view('content.rapat.kehadiran',['kehadirans' => $kehadirans,'rapat'=>$rapat]);
     }
 
     public function statusMulai($id){
