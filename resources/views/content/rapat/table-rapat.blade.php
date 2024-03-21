@@ -1,10 +1,11 @@
 @extends('dashboard')
 
 @section('content')
+<h1 class="text-3xl font-semibold mb-10">List Rapat</h1>
 <div class="grid grid-flow-col grid-cols-3">
   @foreach ($rapats as $rapat)
   <div class="w-80 p-4 bg-white rounded-lg">
-      <img src="{{ asset($rapat->qr_code) }}" alt="QR Code" class="h-fit w-fit rounded-md object-cover" />
+      <img src="{{ asset("/storage/".$rapat->qr_code) }}" alt="QR Code" class="h-fit w-fit rounded-md object-cover" />
 
       <div class="mt-2">
           <dl>

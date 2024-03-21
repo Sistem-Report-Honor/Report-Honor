@@ -1,13 +1,9 @@
 @extends('dashboard')
 
 @section('content')
-    <!--
-  Heads up! 👋
+<h1 class="text-3xl font-semibold">Report Honor Dasar</h1>
 
-  This component comes with some `rtl` classes. Please remove them if they are not needed in your project.
--->
-
-<div class="overflow-x-auto">
+<div class="mt-10 overflow-x-auto">
     <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
       <thead class="ltr:text-left rtl:text-right">
         <tr>
