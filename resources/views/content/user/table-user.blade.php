@@ -1,21 +1,29 @@
 @extends('dashboard')
 
 @section('content')
-<h1 class="text-3xl font-semibold mb-10">Data User</h1>
-<div class="overflow-x-auto">
-    <table id="my-datatable" class="text-sm w-full bg-[#EBE9EE] rounded-lg">
-        <thead>
-            <tr>
-                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10">No.</th>
-                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Nama</th>
-                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">NIP</th>
-                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Jabatan dalam Senat</th>
-                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Golongan</th>
-                <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $counter = 1; ?>
+    <div class="overflow-x-auto">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+            <thead>
+                <tr>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Name</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">NIP</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Username</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Komisi</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Jabatan</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">action</th>
+                </tr>
+            </thead>
             @foreach ($users as $user)
             @if ($user->hasRole('anggota|pimpinan'))
             <tr>
