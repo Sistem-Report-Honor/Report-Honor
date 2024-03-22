@@ -13,25 +13,36 @@
                 {{ session('error') }}
             </div>
         @endif
-        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+        <table id="my-datatable" class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
             <thead>
                 <tr>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10">No</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Name</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">NIP</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        <span class="block text-left">NIP</span>
+                    </th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Username</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Komisi</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Jabatan</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">action</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Action</th>
                 </tr>
             </thead>
+            @php
+            $counter=1
+            @endphp
             @foreach ($users as $user)
             @if ($user->hasRole('anggota|pimpinan'))
             <tr>
-                <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">{{ $counter++ }}</td>
+                <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
+                    <span class="block text-left">{{ $counter++ }}</span>
+                </td>
                 <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">{{ $user->name }}</td>
                 @if ($user->senat != null)
                 <!-- Periksa apakah data senat tersedia -->
-                <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $user->senat->nip }}</td>
+                <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">
+                    <span class="block text-left">{{ $user->senat->nip }}</span>
+                </td>
+                <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $user->username }}</td>
                 <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $user->senat->jabatan }}</td>
                 <!-- Anda dapat mengakses kolom-kolom lainnya dari tabel senat seperti ini -->
                 <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $user->senat->golongan->golongan }}</td>
