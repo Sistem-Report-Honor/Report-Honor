@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RapatController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,45 +20,46 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(function () {
+
+Route::get('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'absen'])->name('absen');
+Route::post('/absen', [AbsenController::class, 'kehadiran'])->name('hadir');
+
+Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(function () {
     Route::get('/dashboard', function () {
         return view('content.dashboard');
     })->name('dashboard');
 
-    Route::get('/user/table',[AdminController::class, 'table'])->middleware(['role:admin'])->name('table.user');
-    Route::get('/user/form',[AdminController::class, 'form'] )->middleware(['role:admin'])->name('form.user');
-    Route::post('/user/form/create',[AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
-    Route::post('/user/table/edit/{id}', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user');
+    Route::get('/user/table', [AdminController::class, 'table'])->middleware(['role:admin'])->name('table.user');
+    Route::get('/user/form', [AdminController::class, 'form'])->middleware(['role:admin'])->name('form.user');
+    Route::post('/user/form/create', [AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
+    Route::get('/user/table/edit/{id}', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user');
     Route::delete('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
 
     Route::get('/rapat', [RapatController::class, 'table'])->middleware(['role:admin|pimpinan'])->name('list.rapat');
-    Route::get('/rapat/form', [RapatController::class,'form'])->middleware(['role:pimpinan'])->name('form.rapat');
-    Route::post('/rapat/form/create',[RapatController::class, 'create'])->middleware(['role:pimpinan'])->name('create.rapat');
+    Route::get('/rapat/form', [RapatController::class, 'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
+    Route::post('/rapat/form/create', [RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
+    Route::get('/rapat/kehadiran/{id}', [RapatController::class, 'kehadiran'])->middleware(["role:admin|pimpinan"])->name('kehadiran.rapat');
+    Route::post('/rapat/kehadiran/{id_rapat}/{id_senat}',[AbsenController::class, 'verif'])->middleware(['role:pimpinan|admin'])->name('verif');
+    Route::post('/rapat/kehadiran/{id_rapat}',[AbsenController::class,'verif_selected'])->middleware('role:admin|pimpinan')->name('verif.selected');
+    Route::post('/rapat/{id}/status/mulai', [RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
+    Route::post('/rapat/{id}/status/selesai', [RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
 
-    Route::get('/honor/detail', function(){
+    Route::get('/honor/detail', function () {
         return view('content.honor.honor-detail');
     })->middleware(['role:admin|keuangan'])->name('list.honor.detail');
 
     Route::get('/honor/dasar', [AdminController::class, 'tableSenat'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
 
-    Route::get('/honor/dasar/pribadi', function(){
+    Route::get('/honor/dasar/pribadi', function () {
         return view('content.honor.honor-dasar-pribadi');
     })->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
 
-    Route::get('/account/detail', function(){
-        return view('content.account.detail-account');
-    })->name('account.detail');
+    Route::get('/absen/user', [UserController::class, 'kehadiran'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
 
-    Route::get('/account/change_password', function(){
-        return view('content.account.change-password');
-    })->name('change.password');
+    Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
 
-    Route::get('/absen/{kode_unik?}', function(){
-        return view('content.absen.absen');
-    })->middleware(['role:anggota|pimpinan'])->name('absen');
+    Route::get('/account/change_password', [UserController::class, 'password'])->name('change.password');
 });
 
 
-
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

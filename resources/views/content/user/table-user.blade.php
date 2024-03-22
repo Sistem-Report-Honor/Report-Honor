@@ -2,6 +2,17 @@
 
 @section('content')
     <div class="overflow-x-auto">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
             <thead>
                 <tr>
@@ -59,7 +70,6 @@
                                     <div>
                                         <form id="deleteForm" action="{{ route('delete.user', $user->id) }}" method="POST">
                                             @csrf
-                                            @method('DELETE')
                                             <button type="submit"
                                                 onclick="return confirm('Are you sure you want to delete this user?')"
                                                 class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700">

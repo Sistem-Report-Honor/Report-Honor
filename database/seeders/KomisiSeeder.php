@@ -29,6 +29,11 @@ class KomisiSeeder extends Seeder
             'komisi' => 'Kerjasama',
             // tambahkan field lain sesuai dengan kebutuhan
         ]);
+        
+        Komisi::create([
+            'komisi' => 'Pleno',
+            // tambahkan field lain sesuai dengan kebutuhan
+        ]);
 
         // Menambahkan data Golongan lainnya jika diperlukan
     }
