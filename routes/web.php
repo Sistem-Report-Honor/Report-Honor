@@ -27,20 +27,18 @@ Route::middleware(['auth','role:admin|pimpinan|keuangan|anggota'])->group(functi
     Route::get('/user/table',[AdminController::class, 'table'])->middleware(['role:admin'])->name('table.user');
     Route::get('/user/form',[AdminController::class, 'form'] )->middleware(['role:admin'])->name('form.user');
     Route::post('/user/form/create',[AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
-    Route::get('/user/table/edit/{id}', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user');
+    Route::post('/user/table/edit/{id}', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user');
     Route::delete('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
 
     Route::get('/rapat', [RapatController::class, 'table'])->middleware(['role:admin|pimpinan'])->name('list.rapat');
-    Route::get('/rapat/form', [RapatController::class,'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
-    Route::post('/rapat/form/create',[RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
+    Route::get('/rapat/form', [RapatController::class,'form'])->middleware(['role:pimpinan'])->name('form.rapat');
+    Route::post('/rapat/form/create',[RapatController::class, 'create'])->middleware(['role:pimpinan'])->name('create.rapat');
 
     Route::get('/honor/detail', function(){
         return view('content.honor.honor-detail');
     })->middleware(['role:admin|keuangan'])->name('list.honor.detail');
 
-    Route::get('/honor/dasar', function(){
-        return view('content.honor.honor-dasar');
-    })->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
+    Route::get('/honor/dasar', [AdminController::class, 'tableSenat'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
 
     Route::get('/honor/dasar/pribadi', function(){
         return view('content.honor.honor-dasar-pribadi');

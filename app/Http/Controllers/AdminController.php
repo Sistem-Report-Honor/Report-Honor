@@ -27,6 +27,18 @@ class AdminController extends Controller
         return view('content.user.form-user', ['golongans' => $golongans, 'komisis' => $komisis, 'roles' => $roles]);
     }
 
+    public function tableSenat()
+    {
+
+    $senats = Senat::with('user')->get();
+    $honorariums = Golongan::all()->map(function ($golongan) {
+        return ($golongan->honor * 4) - ($golongan->pph * 4);
+    });
+
+    return view('content.honor.honor-dasar', ['senats' => $senats, 'honorariums' => $honorariums]);
+    }
+
+
     public function create(Request $request)
     {
         // Validasi input dari request
@@ -77,7 +89,7 @@ class AdminController extends Controller
         $golongan = Golongan::all();
         $komisi = Komisi::all();
         $role = Role::all();
-        return view('content.user.edit-user', ['user' => $user, 'golongans' => $golongan, 'komisis' => $komisi, 'roles' => $role]);
+        return redirect()->route('table.user')->with('success', 'User berhasil diupdate.');
     }
 
     public function delete($id)
