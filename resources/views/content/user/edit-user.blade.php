@@ -10,7 +10,7 @@
     <!-- Validation Errors -->
     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-    <form action="POST" method="POST">
+    <form action="{{route('edit.user.post',$user->id)}}" method="POST">
         @csrf
         <div class="space-y-6">
             <div>

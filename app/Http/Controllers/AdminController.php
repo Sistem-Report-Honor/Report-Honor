@@ -71,7 +71,7 @@ class AdminController extends Controller
         return redirect()->route('table.user')->with('success', 'User berhasil ditambahkan.');
     }
 
-    public function edit($id)
+    public function edit_view($id)
     {
         $user =  User::where('id', $id)->with('senat')->first();
         $golongan = Golongan::all();
@@ -79,18 +79,49 @@ class AdminController extends Controller
         $role = Role::all();
         return view('content.user.edit-user', ['user' => $user, 'golongans' => $golongan, 'komisis' => $komisi, 'roles' => $role]);
     }
+    public function edit(Request $request, $id)
+    {
+        $user = User::find($id);
+        $senat =  Senat::find($user->id_senat);
+        if (!$user || !$senat) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
+
+        // Perbarui record di tabel 'Senat'
+        $senat->update([
+            'name' => $request->name,
+            'nip' => $request->nip,
+            'no_rek' => $request->no_rek,
+            'nama_rekening' => $request->nama_rekening,
+            'id_golongan' => $request->id_golongan,
+            'id_komisi' => $request->id_komisi,
+            'jabatan' => $request->jabatan,
+            'NPWP' => $request->NPWP,
+            // Isi kolom lainnya sesuai kebutuhan
+        ]);
+
+        // Perbarui record di tabel 'User'
+        $user->update([
+            'name' => $request->name, // Pastikan 'name' ada dalam request
+            'username' => $request->username,
+        ]);
+        $user->syncRoles([$request->role]); // Sinkronisasi peran pengguna
+
+        // Redirect atau lakukan tindakan lainnya setelah berhasil mengedit record
+        return redirect()->route('table.user')->with('success', 'User berhasil diedit.')->alert('User berhasil');
+    }
+
 
     public function delete($id)
     {
         $user = User::find($id);
         $senat =  Senat::find($user->id_senat);
-        if (!$user && !$senat){
-            return response()->json(['message' => 'Data not found'], 404);
+        if (!$user && !$senat) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
-
         $user->delete();
         $senat->delete();
 
-        return response()->json(['message' => 'Data deleted successfully'], 200);
+        return redirect()->back()->with('success', 'Data Berhasil Dihapus');
     }
 }
