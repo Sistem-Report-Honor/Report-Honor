@@ -81,7 +81,7 @@
             </tbody>
         </table>
     </div>
-    @if (Auth::user()->hasRole('pimpinan'))    
+    @if (Auth::user()->hasRole('pimpinan') || Auth::user()->hasRole('admin'))   
     <div class="flex flex-row gap-2 items-start p-4">
         <!-- Tampilkan jumlah item yang dipilih di sini -->
         <p class="basis-1/8 text-sm font-medium text-gray-700"><span id="selected-count">0</span> item dipilih</p>
