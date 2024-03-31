@@ -53,7 +53,7 @@ class AbsenController extends Controller
                 'waktu' => now(),
                 'verifikasi' => 'Absen'
             ]);
-            return redirect()->back()->with('succes','Berhasil Absen');
+            return redirect()->back()->with('success','Berhasil Absen');
         } else {
             // Jika kata sandi tidak cocok, kembalikan respon dengan kesalahan
             return redirect()->back()->with('error','Password tidak cocok');

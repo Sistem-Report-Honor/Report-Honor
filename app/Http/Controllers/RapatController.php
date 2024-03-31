@@ -75,6 +75,13 @@ class RapatController extends Controller
         $rapat = Rapat::findOrFail($id);
         $rapat->status = 'selesai';
         $rapat->save();
+        $kehadirans = Kehadiran::where('id_rapat', $id)->where('verifikasi', 'absen')->get();
+        if($kehadirans != null){
+            foreach ($kehadirans as $absen){
+                $absen->verifikasi = 'Tidak Hadir';
+                $absen->save();
+            }
+        }
 
         return redirect()->route('list.rapat')->with('success', 'rapat berhasil Di akhiri');
     }

@@ -18,6 +18,7 @@
 
         @if ($rapat->status == 'mulai')
             <form action="{{ route('hadir', [$rapat->kode_unik, $id_komisi]) }}" method="POST">
+                @csrf
                 <input type="text" id="id_rapat" name="id_rapat" value="{{ $rapat->id }}" hidden>
                 <div class="space-y-6">
                     <div>

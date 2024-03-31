@@ -37,12 +37,14 @@
                         <dd class="font-semibold">Rapat {{ $rapat->komisi->komisi }}</dd>
                     </div>
 
-                    <div class="mt-4">
-                        <a class="inline-flex items-center gap-2 text-sm text-blue-600 underline"
-                            href="{{ route('kehadiran.rapat', [$rapat->id]) }}">
-                            <span>Cek Kehadiran</span>
-                        </a>
-                    </div>
+                    @if ($rapat->status != 'prepare')
+                        <div class="mt-4">
+                            <a class="inline-flex items-center gap-2 text-sm text-blue-600 underline"
+                                href="{{ route('kehadiran.rapat', [$rapat->id]) }}">
+                                <span>Cek Kehadiran</span>
+                            </a>
+                        </div>
+                    @endif
 
                     <div class="mt-4 flex items-center gap-6 text-xs justify-evenly bg-[#faf5ff] p-2.5 rounded-md">
                         <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
