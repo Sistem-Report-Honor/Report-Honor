@@ -87,30 +87,33 @@
             </tbody>
         </table>
     </div>
-    @if (Auth::user()->hasRole('pimpinan') || Auth::user()->hasRole('admin'))   
-    <div class="flex flex-row gap-2 items-start p-4">
-        <!-- Tampilkan jumlah item yang dipilih di sini -->
-        <p class="basis-1/8 text-sm font-medium text-gray-700"><span id="selected-count">0</span> item dipilih</p>
-        <div class="grid">
-            <form action="{{ route('verif.selected', [$rapat->id]) }}" method="POST">
-                @csrf
-                <div class="">
-                    <select name="status" id="status" required
-                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="Hadir">Hadir</option>
-                        <option value="Tidak Hadir">Tidak Hadir</option>
-                    </select>
-                    <input type="hidden" id="selected-senats" name="selected_senats" value="">
-                </div>
-                <div class="mt-2">
-                    <button type="submit" onclick="return confirm('Apakah Anda yakin?')"
-                        class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-green-700 mr-2">
-                        Verify
-                    </button>
-                </div>
-            </form>
+    @if (Auth::user()->hasRole('pimpinan') || Auth::user()->hasRole('admin'))
+        <div class="flex flex-row gap-2 items-start p-4">
+            <!-- Tampilkan jumlah item yang dipilih di sini -->
+            <p class="basis-1/8 text-sm font-medium text-gray-700"><span id="selected-count">0</span> item dipilih</p>
+            <div class="grid">
+                @if ($rapat != null)
+                    <form action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST">
+                        @csrf
+                        <div class="">
+                            <select name="status" id="status" required
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="Hadir">Hadir</option>
+                                <option value="Tidak Hadir">Tidak Hadir</option>
+                            </select>
+                            <input type="hidden" id="selected-senats" name="selected_senats" value="">
+                        </div>
+                        <div class="mt-2">
+                            <button type="submit" onclick="return confirm('Apakah Anda yakin?')"
+                                class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-green-700 mr-2">
+                                Verify
+                            </button>
+                        </div>
+                    </form>
+                @endif
+
+            </div>
         </div>
-    </div>
     @endif
     <script>
         document.addEventListener('DOMContentLoaded', function() {

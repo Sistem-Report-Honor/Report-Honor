@@ -39,7 +39,7 @@
 
                     <div class="mt-4">
                         <a class="inline-flex items-center gap-2 text-sm text-blue-600 underline"
-                            href="{{ route('kehadiran.rapat', $rapat->id) }}">
+                            href="{{ route('kehadiran.rapat', [$rapat->id]) }}">
                             <span>Cek Kehadiran</span>
                         </a>
                     </div>
