@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
+
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -17,14 +18,14 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
+    Route::get('/', function () {
     return view('welcome');
-});
+    });
 
-Route::get('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'absen'])->name('absen');
-Route::post('/absen', [AbsenController::class, 'kehadiran'])->name('hadir');
+    Route::get('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'absen'])->name('absen');
+    Route::post('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'kehadiran'])->name('hadir');
 
-Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(function () {
+    Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(function () {
     Route::get('/dashboard', function () {
         return view('content.dashboard');
     })->name('dashboard');
@@ -32,23 +33,21 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/user/table', [AdminController::class, 'table'])->middleware(['role:admin'])->name('table.user');
     Route::get('/user/form', [AdminController::class, 'form'])->middleware(['role:admin'])->name('form.user');
     Route::post('/user/form/create', [AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
-    Route::get('/user/table/edit/{id}', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user');
-    Route::delete('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
+    Route::get('/user/table/edit/{id}', [AdminController::class, 'edit_view'])->middleware(['role:admin'])->name('edit.user');
+    Route::post('/user/table/edit/{id}/post', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user.post');
+    Route::post('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
 
     Route::get('/rapat', [RapatController::class, 'table'])->middleware(['role:admin|pimpinan'])->name('list.rapat');
     Route::get('/rapat/form', [RapatController::class, 'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
     Route::post('/rapat/form/create', [RapatController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('create.rapat');
     Route::get('/rapat/kehadiran/{id}', [RapatController::class, 'kehadiran'])->middleware(["role:admin|pimpinan"])->name('kehadiran.rapat');
-    Route::post('/rapat/kehadiran/{id_rapat}/{id_senat}',[AbsenController::class, 'verif'])->middleware(['role:pimpinan|admin'])->name('verif');
     Route::post('/rapat/kehadiran/{id_rapat}',[AbsenController::class,'verif_selected'])->middleware('role:admin|pimpinan')->name('verif.selected');
     Route::post('/rapat/{id}/status/mulai', [RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
     Route::post('/rapat/{id}/status/selesai', [RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
 
-    Route::get('/honor/detail', function () {
-        return view('content.honor.honor-detail');
-    })->middleware(['role:admin|keuangan'])->name('list.honor.detail');
+    Route::get('/honor/detail', [AdminController::class, 'reportDetail'])->middleware(['role:admin|keuangan'])->name('list.honor.detail');
 
-    Route::get('/honor/dasar', [AdminController::class, 'tableSenat'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
+    Route::get('/honor/dasar', [AdminController::class, 'reportDasar'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
 
     Route::get('/honor/dasar/pribadi', function () {
         return view('content.honor.honor-dasar-pribadi');

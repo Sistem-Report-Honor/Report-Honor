@@ -1,26 +1,46 @@
 @extends('dashboard')
 
 @section('content')
-    <div class="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
-        <!-- Validation Errors -->
+    <h1 class="text-3xl font-semibold mb-10">Create Rapat</h1>
+    <div class="w-full h-[1px] bg-[#666]"></div>
+    <div class="p-6">
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
         <form action="{{ route('create.rapat') }}" method="POST">
             @csrf
-            <div>
-                <label for="id_komisi" class="komisi">Komisi</label>
-                <select id="id_komisi" name="id_komisi" class="w-full rounded-lg border-gray-200 p-3 text-sm">
-                    @foreach ($komisis as $komisi)
-                        <option value="{{ $komisi->id }}">{{ $komisi->komisi }}</option>
-                    @endforeach
-                </select>
+            <div class="space-y-6">
+                {{-- <div>
+                    <label class="block text-xs font-semibold text-gray-900"> Nama Rapat </label>
+                    <input type="text" placeholder="Nama Rapat" name="nama_rapat"
+                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" required />
+                </div> --}}
+                <div>
+                    <label class="block text-xs font-semibold text-gray-900"> Tanggal </label>
+                    <input type="date" name="tanggal"
+                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" required />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-900"> Jam </label>
+                    <input type="time" name="jam"
+                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" required />
+                </div>
+                <div>
+                    <label for="id_komisi" class="block text-xs font-semibold text-gray-900">Komisi</label>
+                    <select id="id_komisi" name="id_komisi"
+                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5"
+                        required>
+                        <option value="" selected>Pilih</option>
+                        @foreach ($komisis as $komisi)
+                            <option value="{{ $komisi->id }}">{{ $komisi->komisi }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <div  class="mt-6">
-                <label for="tanggal">Tanggal Rapat:</label><br>
-                <input type="date" id="tanggal" name="tanggal"><br><br>
-                <label for="jam">Jam Rapat:</label><br>
-                <input type="time" id="jam" name="jam"><br><br>
+            <div class="mt-12">
+                <button type="submit"
+                    class="inline-block w-full min-w-56 rounded-lg bg-[#6E2BB1] hover:bg-[#8b3ce1] px-5 py-2 font-medium text-white sm:w-auto transition-all">
+                    {{ __('Submit') }}
+                </button>
             </div>
-            <button type="submit" class="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto">Buat QR Code</button>
         </form>
     </div>
 @endsection

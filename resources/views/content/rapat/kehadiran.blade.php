@@ -6,6 +6,12 @@
             {{ session('success') }}
         </div>
     @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div class="pb-4 bg-white">
             <label for="table-search" class="sr-only">Search</label>
@@ -86,7 +92,7 @@
         <!-- Tampilkan jumlah item yang dipilih di sini -->
         <p class="basis-1/8 text-sm font-medium text-gray-700"><span id="selected-count">0</span> item dipilih</p>
         <div class="grid">
-            <form action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST">
+            <form action="{{ route('verif.selected', [$rapat->id]) }}" method="POST">
                 @csrf
                 <div class="">
                     <select name="status" id="status" required
