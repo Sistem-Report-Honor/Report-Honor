@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CobaController;
 use App\Http\Controllers\RapatController;
 use App\Http\Controllers\UserController;
 
@@ -21,6 +22,7 @@ use App\Http\Controllers\UserController;
     Route::get('/', function () {
     return view('welcome');
     });
+    Route::get('/coba', [CobaController::class, 'reportDetail'])->name('coba');
 
     Route::get('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'absen'])->name('absen');
     Route::post('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'kehadiran'])->name('hadir');

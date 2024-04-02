@@ -94,7 +94,7 @@ class AdminController extends Controller
             }
         }
     
-        return view('content.honor.honor-detail', ['senats' => $senats, 'rapats' => $rapats, 'honorariums' => $honorariumsPerSenat]);
+        return view('content.coba', ['senats' => $senats, 'rapats' => $rapats, 'honorariums' => $honorariumsPerSenat]);
     }    
 
     public function create(Request $request)
