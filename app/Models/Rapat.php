@@ -14,19 +14,18 @@ class Rapat extends Model
      *
      * @var array
      */
+    protected $table ='rapat';
     protected $fillable = [
         'kode_unik',
+        'id_komisi',
         'tanggal',
         'jam',
         'qr_code',
         'time_expired',
     ];
 
-    /**
-     * Relationship with Golongan model
-     */
-    public function golongan()
-    {
-        return $this->belongsTo(Golongan::class, 'id_golongan');
+    public function komisi(){
+        return $this->belongsTo(Komisi::class, 'id_komisi');
     }
+    
 }

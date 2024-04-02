@@ -16,17 +16,16 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('username')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            // Mengubah kolom 'id_senat' menjadi unsignedBigInteger dan nullable
+            // Kolom untuk menautkan ke tabel 'senat'
             $table->unsignedBigInteger('id_senat')->nullable();
-
-            // Menambahkan kunci asing ke kolom 'id_senat' pada tabel 'users'
-            $table->foreign('id_senat')->references('id')->on('users')->onDelete('cascade');
+            // Tambahkan kunci asing ke kolom 'id_senat'
+            $table->foreign('id_senat')->references('id')->on('senat')->onDelete('cascade');
         });
+        
     }
 
 

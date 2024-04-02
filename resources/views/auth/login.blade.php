@@ -1,56 +1,55 @@
 <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+    <div class="bg-white">
+        <div class="flex justify-center h-screen">
+            <div class="hidden bg-cover lg:block lg:w-3/5" style="background-image: url(images/bg-login.png)">
+                <div class="flex items-center h-full px-20 bg-black bg-opacity-60">
+                    <div class="font-bold text-white text-[42px]">
+                        <h2 class="">SENAT</h2>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                        <p class="max-w-xl">
+                            Politeknik Negeri Medan
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+            <div class="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
+                <div class="flex-1">
+                    <div class="leading-8">
+                        <!-- <div class="flex justify-center mx-auto">
+                            <img class="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="">
+                        </div> -->
+                        <h1 class="font-bold text-[32px]">Masuk</h1>
+                        <p class="text-black font-medium">Masuk untuk melanjutkan</p>
+                    </div>
 
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
+                    <div class="mt-8">
+                        <form action="{{ route('login') }}" method="POST">
+                            @csrf
+                            <div>
+                                <label for="username" class="mb-2 text-sm text-black font-semibold">Username</label>
+                                <input type="text" name="username" id="username" placeholder="Masukan username" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-[#E6E6E6] border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="password" class="text-sm text-black font-semibold">Password</label>
+                                <input type="password" name="password" id="password" placeholder="Masukan password" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-[#E6E6E6] border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                            </div>
+                            <!-- Validation Errors -->
+                            <p class="mt-6 text-sm text-center text-gray-400">
+                                <x-auth-session-status class="mb-4" :status="session('status')" />
+                                <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                            </p>
+                            <div class="mt-20 md:mt-28 lg:mt-36">
+                                <button type="submit" class="w-full px-4 py-2 tracking-wide text-white font-bold transition-colors duration-300 transform bg-[#6E2BB1] rounded-lg hover:bg-[#8b3ce1]">
+                                    Masuk
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
             </div>
-
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
+        </div>
+    </div>
 </x-guest-layout>

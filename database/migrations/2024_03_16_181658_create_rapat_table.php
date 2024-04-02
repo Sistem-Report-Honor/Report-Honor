@@ -15,14 +15,17 @@ class CreateRapatTable extends Migration
     {
         Schema::create('rapat', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_komisi');
             $table->string('kode_unik')->unique();
             $table->date('tanggal');
             $table->time('jam');
             $table->string('qr_code');
-            $table->enum('status', ['mulai', 'selesai']);
+            $table->enum('status', ['prepare','mulai', 'selesai']);
             $table->dateTime('time_expired')->nullable();
 
             $table->timestamps();
+
+            $table->foreign('id_komisi')->references('id')->on('komisi')->onDelete('cascade');
         });
     }
 
