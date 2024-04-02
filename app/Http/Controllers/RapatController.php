@@ -54,6 +54,7 @@ class RapatController extends Controller
         $waktu = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal . ' ' . $request->jam);
         $expirationTime = $waktu->addDay(); // Menambah satu hari
 
+
         $rapat = Rapat::create([
             'id_komisi' => $request->id_komisi,
             'kode_unik' => $kode_unik,
@@ -78,9 +79,9 @@ class RapatController extends Controller
         $rapat = Rapat::findOrFail($id);
         $rapat->status = 'mulai';
         $rapat->save();
-
         return redirect()->route('list.rapat')->with('success', 'rapat berhasil Di Mulai');
     }
+
     public function statusSelesai($id)
     {
         $rapat = Rapat::findOrFail($id);
