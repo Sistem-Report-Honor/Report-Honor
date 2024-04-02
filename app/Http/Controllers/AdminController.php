@@ -66,36 +66,185 @@ class AdminController extends Controller
     return view('content.honor.honor-dasar', ['senats' => $senats, 'honorariums' => $honorariumsPerSenat]);
     }
 
-    public function reportDetail()
-    {
+    public function reportDetail() {
+    // Dapatkan semua senat dengan relasi yang diperlukan
+    $senats = Senat::with(['user', 'golongan', 'komisi'])->get();
 
-        $senats = Senat::with(['user', 'golongan'])->get();
-        $rapats = Rapat::all();
-        
-        // Mengambil data kehadiran dengan verifikasi 'Hadir'
-        $kehadirans = Kehadiran::where('verifikasi', 'Hadir')->get();
+    // Dapatkan semua rapat
+    $rapats = Rapat::all();
+
+    $kehadiran = Kehadiran::where('verifikasi', 'Hadir')->get();
+
         // Menghitung jumlah kehadiran untuk setiap anggota rapat
-        $jumlahKehadiran = [];
+    $jumlahKehadiran = [];
         foreach ($senats as $senat) {
             // Menghitung jumlah kehadiran berdasarkan id senat
-            $jumlahKehadiran[$senat->id] = $kehadirans->where('id_senat', $senat->id)->count();
-        }
+            $jumlahKehadiran[$senat->id] = $kehadiran->where('id_senat', $senat->id)->count();
+    }
         
-        $honorariumsPerSenat = [];
+    $honorPerSenat = [];
+    $pphPerSenat = [];
+    $honorariumsPerSenat = [];
         foreach ($senats as $senat) {
              $golongan = $senat->golongan;
             if ($golongan) {
                 $honors = $golongan->honor;
                 $pphs = $golongan->pph;
                 $honorariumsPerSenat[$senat->id] = ($honors - $pphs) * ($jumlahKehadiran[$senat->id] ?? 0);
+                $honorPerSenat[$senat->id] = $honors * ($jumlahKehadiran[$senat->id] ?? 0);
+                $pphPerSenat[$senat->id] = $pphs * ($jumlahKehadiran[$senat->id] ?? 0);
             } else {
                 // Atur nilai honorarium menjadi 0 jika golongan tidak ditemukan
                 $honorariumsPerSenat[$senat->id] = 0;
+                $honorPerSenat[$senat->id] = 0;
+                $pphPerSenat[$senat->id] = 0;
+            }
+    }
+
+    // Inisialisasi array untuk menyimpan kehadiran, pph, dan honor untuk setiap senat dalam setiap rapat
+    $kehadirans = [];
+    $pphs = [];
+    $honors = [];
+
+    // Lakukan perulangan melalui semua senat
+    foreach ($senats as $senat) {
+        // Inisialisasi array untuk rapat-rapat yang terkait dengan senat saat ini
+        $kehadirans[$senat->id] = [];
+        $pphs[$senat->id] = [];
+        $honors[$senat->id] = [];
+    
+        // Lakukan perulangan melalui semua rapat
+        foreach ($rapats as $rapat) {
+            // Periksa apakah senat hadir dalam rapat yang sesuai
+            $hadir = Kehadiran::where('id_senat', $senat->id)
+                              ->where('id_rapat', $rapat->id)
+                              ->exists();
+    
+            if ($hadir) {
+                // Jika senat hadir, dapatkan informasi pph dan honor
+                $golongan = $senat->golongan;
+                $pph = $golongan ? $golongan->pph : 0;
+                $honor = $golongan ? $golongan->honor : 0;
+    
+                // Simpan informasi kehadiran, pph, dan honor dalam array
+                $kehadirans[$senat->id][$rapat->id] = true;
+                $pphs[$senat->id][$rapat->id] = $pph;
+                $honors[$senat->id][$rapat->id] = $honor;
+            } else {
+                // Jika senat tidak hadir, atur pph dan honor menjadi 0
+                $kehadirans[$senat->id][$rapat->id] = false;
+                $pphs[$senat->id][$rapat->id] = 0;
+                $honors[$senat->id][$rapat->id] = 0;
             }
         }
-    
-        return view('content.honor.honor-detail', ['senats' => $senats, 'rapats' => $rapats, 'honorariums' => $honorariumsPerSenat]);
-    }    
+    }
+
+    // dd($kehadirans);
+
+    $honorariumsPerRapat = [];
+
+    // Lakukan perulangan melalui semua rapat
+    foreach ($rapats as $rapat) {
+        // Inisialisasi total honorarium untuk rapat ini
+        $totalHonorariumRapat = 0;
+
+        // Lakukan perulangan melalui semua kehadiran
+        foreach ($kehadiran as $hadir) {
+            // Periksa apakah kehadiran ini terkait dengan rapat yang sedang diproses
+            if ($hadir->id_rapat == $rapat->id) {
+                // Dapatkan informasi golongan senat yang hadir
+                $senat = $senats->firstWhere('id', $hadir->id_senat);
+                $golongan = $senat->golongan;
+
+                if ($golongan) {
+                    // Hitung honorarium untuk senat ini pada rapat ini
+                    $honors = $golongan->honor;
+                    $pphs = $golongan->pph;
+                    $honorarium = ($honors - $pphs);
+                }
+            }
+        }
+
+        // Simpan total honorarium untuk rapat ini dalam array
+        $honorariumsPerRapat[$rapat->id] = $honorarium;
+    }
+
+    // Tampilkan data ke view
+    return view('content.honor.honor-detail', [
+        'senats' => $senats,
+        'rapats' => $rapats,
+        'kehadirans' => $kehadirans,
+        'honorariumsPerRapat' => $honorariumsPerRapat,
+        'honorariums' => $honorariumsPerSenat,
+        'pphs' => $pphs,
+        'honors' => $honors,
+        'honorPerSenat' => $honorPerSenat,
+        'pphPerSenat' => $pphPerSenat
+    ]);
+    }
+
+
+    // public function reportDetail()
+    // {
+
+    //     $senats = Senat::with(['user', 'golongan'])->get();
+    //     $rapats = Rapat::all();
+        
+    //     // Mengambil data kehadiran dengan verifikasi 'Hadir'
+    //     $kehadirans = Kehadiran::where('verifikasi', 'Hadir')->get();
+
+    //     // Menghitung jumlah kehadiran untuk setiap anggota rapat
+    //     $jumlahKehadiran = [];
+    //     foreach ($senats as $senat) {
+    //         // Menghitung jumlah kehadiran berdasarkan id senat
+    //         $jumlahKehadiran[$senat->id] = $kehadirans->where('id_senat', $senat->id)->count();
+    //     }
+        
+    //     $honorariumsPerSenat = [];
+    //     foreach ($senats as $senat) {
+    //          $golongan = $senat->golongan;
+    //         if ($golongan) {
+    //             $honors = $golongan->honor;
+    //             $pphs = $golongan->pph;
+    //             $honorariumsPerSenat[$senat->id] = ($honors - $pphs) * ($jumlahKehadiran[$senat->id] ?? 0);
+    //         } else {
+    //             // Atur nilai honorarium menjadi 0 jika golongan tidak ditemukan
+    //             $honorariumsPerSenat[$senat->id] = 0;
+    //         }
+    //     }
+
+    //     $honorsPerSenat = [];
+    //     $pphPerSenat = [];
+   
+        
+    //     foreach ($senats as $senat) {
+    //         // Lakukan pengecekan kehadiran untuk setiap senatt
+    //         if ($rapat && $rapat->komisi_id == $senat->komisi_id) {
+    //             // Lakukan pengisian nilai jika rapat dan komisi_id sesuai
+    //             if ($kehadirans->where('id_senat', $senat->id)->isNotEmpty()) {
+    //                 // Lakukan pengisian nilai jika ada kehadiran
+    //                 $golongan = $senat->golongan;
+    //                 $honors = $golongan->honor ?? 0;
+    //                 $pphs = $golongan->pph ?? 0;
+    //                 $honorsPerSenat[$senat->id] = $honors;
+    //                 $pphPerSenat[$senat->id] = $pphs;
+    //             } else {
+    //                 // Jika tidak ada kehadiran, atur nilai menjadi 0
+    //                 $honorsPerSenat[$senat->id] = 0;
+    //                 $pphPerSenat[$senat->id] = 0;
+    //             }
+    //         } else {
+    //             // Jika rapat atau komisi_id tidak sesuai, atur nilai menjadi 0
+    //             $honorsPerSenat[$senat->id] = 0;
+    //             $pphPerSenat[$senat->id] = 0;
+    //         }
+        
+    //     }
+
+    //     dd($honorsPerSenat, $pphPerSenat);
+  
+    //     return view('content.honor.honor-detail', ['senats' => $senats, 'rapats' => $rapats, 'honorariums' => $honorariumsPerSenat, 'pph' => $pphPerSenat, 'honor' => $honorsPerSenat]);
+    // }    
 
     public function create(Request $request)
     {
