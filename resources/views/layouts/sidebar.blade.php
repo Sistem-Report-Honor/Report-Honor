@@ -158,12 +158,6 @@
                             Honor Dasar Pribadi
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('kehadiran.user') }}"
-                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-                            Absen
-                        </a>
-                    </li>
                 @endif
 
                 @if (Auth::user()->hasRole('keuangan'))
@@ -208,12 +202,6 @@
                         <a href="{{ route('list.honor.dasar.pribadi') }}"
                             class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                             Honor Dasar Pribadi
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('kehadiran.user') }}"
-                            class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-                            Absen
                         </a>
                     </li>
                 @endif

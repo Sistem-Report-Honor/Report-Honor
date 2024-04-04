@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CobaController;
 use App\Http\Controllers\RapatController;
 use App\Http\Controllers\UserController;
@@ -37,7 +38,7 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/user/table', [AdminController::class, 'table'])->middleware(['role:admin'])->name('table.user');
     Route::get('/user/form', [AdminController::class, 'form'])->middleware(['role:admin'])->name('form.user');
     Route::post('/user/form/create', [AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
-    Route::get('/user/table/edit/{id}', [AdminController::class, 'edit_view'])->middleware(['role:admin'])->name('edit.user');
+    Route::get('/user/table/edit/{id}', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user');
     Route::post('/user/table/edit/{id}/post', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user.post');
     Route::post('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
 
@@ -51,14 +52,12 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/print/{id}/qr', [RapatController::class, 'printQR'])->name('print.qr');
 
 
-    Route::get('/honor/detail', [AdminController::class, 'reportDetail'])->middleware(['role:admin|keuangan'])->name('list.honor.detail');
-    Route::get('/honor/dasar', [AdminController::class, 'reportDasar'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
-    Route::get('/honor/dasar/print-report', [AdminController::class, 'printReport'])->middleware(['role:admin|keuangan'])->name('print.honor.dasar');
-    Route::get('/honor/dasar/pribadi', function () {
-        return view('content.honor.honor-dasar-pribadi');
-    })->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
+    Route::get('/honor/detail', [ReportController::class, 'reportDetail'])->middleware(['role:admin|keuangan'])->name('list.honor.detail');
+    Route::get('/honor/dasar', [ReportController::class, 'reportDasar'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
+    Route::get('/honor/dasar/print-report', [ReportController::class, 'printReport'])->middleware(['role:admin|keuangan'])->name('print.honor.dasar');
+    Route::get('/honor/dasar/pribadi', [ReportController::class, 'reportPribadi'])->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
 
-    Route::get('/absen/user', [UserController::class, 'kehadiran'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
+    // Route::get('/absen/user', [UserController::class, 'kehadiran'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
 
     Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
 

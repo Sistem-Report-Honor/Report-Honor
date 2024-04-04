@@ -5,16 +5,18 @@
     <div class="flex justify-end mb-4">
         <button class="inline-block rounded-md bg-[#6E2BB1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">Print Report</button>
     </div>
+    
     <div class="overflow-x-auto">
         <table id="my-datatable" class="text-sm w-full bg-[#EBE9EE] rounded-lg">
             <thead>
                 <tr>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10" rowspan="2">No.</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Nama</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">GP</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Jabatan dalam Senat</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Komisi</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10" rowspan="3">No.</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">Nama</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">GP</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">Jabatan dalam Senat</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">Komisi</th>
 
+                    <!-- ini jenis rapat -->
                     @foreach ($rapats as $rapat)
                         <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" colspan="3">
                             <span class="block text-center">{{ $rapat->komisi->komisi }}</span>
@@ -22,16 +24,42 @@
                         </th>
                     @endforeach
 
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Total Honor Rapat Senat Bulan</th>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">NPWP</th>
+                    @php
+                    $firstMonthTaken = false; // variabel sementara untuk menyimpan status bulan pertama telah diambil atau belum
+                    @endphp
+
+                    <!-- total honor perbulan -->
+                    @foreach ($rapats as $rapat)
+                    @if (!$firstMonthTaken)
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" colspan="3">
+                        Total Honor Rapat Senat {{ date('M', strtotime($rapat->tanggal)) }}
+                    </th>
+                    @php
+                    $firstMonthTaken = true; // mengatur status bahwa bulan pertama telah diambil
+                  @endphp
+                  @endif
+                  @endforeach
+
+                    <!-- ini npwp -->
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="4">
+                      <span class="text center">NPWP</span>
+                    </th>
                 </tr>
 
+                <!-- honor per rapat -->
                 <tr>
                     @foreach ($rapats as $rapat)
-                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Honor</th>
-                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">PPH</th>
-                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Diterima</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Honor</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">PPH</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Diterima</th>
                     @endforeach
+                </tr>
+
+                <!-- honor perbulan -->
+                <tr>
+                        <th class="whitespace-nowrap px-5 py-2 font-medium text-gray-900">Honor</th>
+                        <th class="whitespace-nowrap px-5 py-2 font-medium text-gray-900">PPH</th>
+                        <th class="whitespace-nowrap px-5 py-2 font-medium text-gray-900">Diterima</th>
                 </tr>
             </thead>
 
@@ -61,7 +89,10 @@
                             @endif
                         @endforeach
 
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ isset($honors[$senat->id]) ? $honors[$senat->id] : 'N/A' }}</td>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ isset($pphs[$senat->id]) ? $pphs[$senat->id] : 'N/A' }}</td>
                         <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ isset($honorariumsPerSenat[$senat->id]) ? $honorariumsPerSenat[$senat->id] : 'N/A' }}</td>
+            
                         <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $senat->NPWP }}</td>
                     </tr>
                 @endforeach
