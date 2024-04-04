@@ -1,112 +1,83 @@
 @extends('dashboard')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div class="pb-4 bg-white">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative mt-1">
-                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                    </svg>
-                </div>
-                <input type="text" id="table-search"
-                    class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                    placeholder="Search for items">
-            </div>
-        </div>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b-4">
+    <h1 class="text-3xl font-semibold mb-10">
+        Data Kehadiran</h1>
+    <div class="overflow-x-auto">
+        <table id="my-datatable" class="text-sm w-full bg-[#EBE9EE] rounded-lg">
+            <thead>
                 <tr>
-                    <th scope="col" class="p-4">
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10">
                         <div class="flex items-center">
                             <input id="checkbox-all-search" type="checkbox"
                                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                            <label for="checkbox-all-search" class="px-2">ALL</label>
+                            <label for="checkbox-all-search" class="px-2">All</label>
                         </div>
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Senat
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10">No</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Nama Senat</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                        <span class="block text-left">Waktu Absen</span>
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Waktu Absen
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Hadir/Tidak
-                    </th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Status</th>
+                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Hadir/Tidak</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($kehadirans as $kehadiran)
-                    <tr class="bg-white border-b  hover:bg-gray-50">
-                        <td class="w-4 p-4">
-                            <div class="flex items-center">
-                                <input id="checkbox-table-search-{{ $kehadiran->id_senat }}" type="checkbox"
-                                    class="checkbox-kehadiran w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 "
-                                    value="{{ $kehadiran->id_senat }}">
-                                <label for="checkbox-table-search-{{ $kehadiran->id_senat }}"
-                                    class="sr-only">checkbox</label>
-                            </div>
-                        </td>
+            @php
+                $counter = 1;
+            @endphp
+            @foreach ($kehadirans as $kehadiran)
+                <tr>
+                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-search-{{ $kehadiran->id_senat }}" type="checkbox"
+                                class="checkbox-kehadiran w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 "
+                                value="{{ $kehadiran->id_senat }}">
+                            <label for="checkbox-table-search-{{ $kehadiran->id_senat }}" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
+                        <span class="block text-left">{{ $counter++ }}</span>
+                    </td>
+                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
+                        {{ $kehadiran->senat->name }}</td>
+                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
+                        {{ $kehadiran->waktu }}</td>
+                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
+                        {{ $kehadiran->verifikasi }}</td>
+                    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
+                        @if ($kehadiran->verifikasi == 'Hadir' || $kehadiran->verifikasi == 'Tidak Hadir')
+                            <span>Sudah Diverifikasi</span>
+                        @else
+                            <span>Belum Diverifikasi</span>
+                        @endif
+                    </td>
 
-                        <td class="px-6 py-4">
-                            {{ $kehadiran->senat->name }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $kehadiran->waktu }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $kehadiran->verifikasi }}
-                        </td>
-                        <td class="px-4 py-4">
-                            @if ($kehadiran->verifikasi == 'Hadir' || $kehadiran->verifikasi == 'Tidak Hadir')
-                                <span>Sudah Diverifikasi</span>
-                            @else
-                                <span>Belum Diverifikasi</span>
-                            @endif
-
-                        </td>
-                    </tr>
-                @endforeach
+                </tr>
+            @endforeach
             </tbody>
         </table>
     </div>
     @if (Auth::user()->hasRole('pimpinan') || Auth::user()->hasRole('admin'))
-        <div class="flex flex-row gap-2 items-start p-4">
+        <div class="mt-4">
             <!-- Tampilkan jumlah item yang dipilih di sini -->
             <p class="basis-1/8 text-sm font-medium text-gray-700"><span id="selected-count">0</span> item dipilih</p>
-            <div class="grid">
+            <div class="mt-2">
                 @if ($rapat != null)
                     @if ($rapat->rapat->status != 'selesai')
-                        <form action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST">
+                        <form id="verifyForm" action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST" class="flex items-center gap-2">
                             @csrf
                             <div class="">
                                 <select name="status" id="status" required
-                                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5">
                                     <option value="Hadir">Hadir</option>
                                     <option value="Tidak Hadir">Tidak Hadir</option>
                                 </select>
                                 <input type="hidden" id="selected-senats" name="selected_senats" value="">
                             </div>
-                            <div class="mt-2">
-                                <button type="submit" onclick="return confirm('Apakah Anda yakin?')"
-                                    class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-green-700 mr-2">
+                            <div class="mt-1">
+                                <button type="submit" onclick="confirmVerify(event)"
+                                    class="text-sm inline-block w-fit rounded-lg bg-[#6E2BB1] hover:bg-[#8b3ce1] px-10 py-2 font-medium text-white sm:w-auto transition-all">
                                     Verify
                                 </button>
                             </div>
@@ -117,6 +88,23 @@
         </div>
     @endif
     <script>
+        function confirmVerify(event) {
+            event.preventDefault();
+            Swal.fire({
+                text: 'Verifikasi kehadiran?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Verikasi!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit form jika dikonfirmasi
+                    document.getElementById('verifyForm').submit();
+                }
+            });
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxAll = document.getElementById('checkbox-all-search');
             const checkboxes = document.querySelectorAll('.checkbox-kehadiran');
