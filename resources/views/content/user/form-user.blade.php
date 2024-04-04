@@ -4,9 +4,6 @@
 <h1 class="text-3xl font-semibold mb-10">Create User</h1>
 <div class="w-full h-[1px] bg-[#666]"></div>
 <div class="p-6">
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('succes')" />
-
     <!-- Validation Errors -->
     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
@@ -96,6 +93,21 @@
 
 <!-- Script untuk toggle password -->
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    didClose: () => {
+                        window.location.href = '/user/table';
+                    }
+                });
+            @endif
+        });
+
     const togglePassword = document.getElementById('togglePassword');
     const password = document.getElementById('password');
 

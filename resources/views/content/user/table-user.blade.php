@@ -3,7 +3,7 @@
 @section('content')
     <h1 class="text-3xl font-semibold mb-10">Data User</h1>
     <div class="overflow-x-auto">
-        @if (session('success'))
+        {{-- @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
@@ -13,7 +13,7 @@
             <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
-        @endif
+        @endif --}}
         <table id="my-datatable" class="text-sm w-full bg-[#EBE9EE] rounded-lg">
             <thead>
                 <tr>
@@ -63,10 +63,9 @@
                                 class="inline-block rounded bg-[#6E2BB1] px-4 py-2 text-xs font-medium text-white hover:bg-[#8b3ce1] transition-all">
                                 View
                             </a>
-                            <form action="{{ route('delete.user', $user->id) }}" method="POST">
+                            <form id="deleteForm" action="{{ route('delete.user', $user->id) }}" method="POST">
                                 @csrf
-                                <button type="submit"
-                                    onclick="return confirm('Are you sure you want to delete this user?')"
+                                <button type="submit" onclick="confirmDelete(event)"
                                     class="inline-block rounded bg-[#c23c44] px-4 py-2 text-xs font-medium text-white hover:bg-[#d75c5d] transition-all">
                                     Delete
                                 </button>
@@ -79,4 +78,24 @@
 
         </table>
     </div>
+
+    <script>
+        function confirmDelete(event) {
+            event.preventDefault();
+            Swal.fire({
+                text: 'Apakah Anda ingin menghapus data?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus Data!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit form jika dikonfirmasi
+                    document.getElementById('deleteForm').submit();
+                }
+            });
+        }
+    </script>
 @endsection

@@ -264,10 +264,19 @@ public function printReport()
     {
         // Dapatkan semua senat dengan relasi yang diperlukan
         $senats = Senat::with(['user', 'golongan', 'komisi'])->get();
+    {
+        // Dapatkan semua senat dengan relasi yang diperlukan
+        $senats = Senat::with(['user', 'golongan', 'komisi'])->get();
 
         // Dapatkan semua rapat
         $rapats = Rapat::all();
+        // Dapatkan semua rapat
+        $rapats = Rapat::all();
 
+        // Inisialisasi array untuk menyimpan kehadiran dan honorarium per rapat
+        $kehadirans = [];
+        $honorariumsPerRapat = [];
+        $honorariumsPerSenat = [];
         // Inisialisasi array untuk menyimpan kehadiran dan honorarium per rapat
         $kehadirans = [];
         $honorariumsPerRapat = [];
@@ -277,7 +286,13 @@ public function printReport()
         foreach ($senats as $senat) {
             // Inisialisasi total honorarium untuk senat ini
             $totalHonorariumSenat = 0;
+        // Lakukan perulangan melalui semua senat
+        foreach ($senats as $senat) {
+            // Inisialisasi total honorarium untuk senat ini
+            $totalHonorariumSenat = 0;
 
+            // Inisialisasi array kehadiran untuk senat ini di setiap rapat
+            $kehadirans[$senat->id] = [];
             // Inisialisasi array kehadiran untuk senat ini di setiap rapat
             $kehadirans[$senat->id] = [];
 
@@ -288,10 +303,22 @@ public function printReport()
                     ->where('id_rapat', $rapat->id)
                     ->where('verifikasi', 'Hadir')
                     ->exists();
+            // Lakukan perulangan melalui semua rapat
+            foreach ($rapats as $rapat) {
+                // Periksa apakah senat hadir dalam rapat yang sedang diproses
+                $hadir = Kehadiran::where('id_senat', $senat->id)
+                    ->where('id_rapat', $rapat->id)
+                    ->where('verifikasi', 'Hadir')
+                    ->exists();
 
                 // Simpan status kehadiran senat dalam rapat
                 $kehadirans[$senat->id][$rapat->id] = $hadir;
+                // Simpan status kehadiran senat dalam rapat
+                $kehadirans[$senat->id][$rapat->id] = $hadir;
 
+                if ($hadir) {
+                    // Dapatkan informasi golongan senat yang hadir
+                    $golongan = $senat->golongan;
                 if ($hadir) {
                     // Dapatkan informasi golongan senat yang hadir
                     $golongan = $senat->golongan;
@@ -300,7 +327,13 @@ public function printReport()
                     $honors = $golongan ? $golongan->honor : 0;
                     $pphs = $golongan ? $golongan->pph : 0;
                     $honorarium = $honors - $pphs;
+                    // Hitung honorarium untuk senat ini pada rapat ini
+                    $honors = $golongan ? $golongan->honor : 0;
+                    $pphs = $golongan ? $golongan->pph : 0;
+                    $honorarium = $honors - $pphs;
 
+                    // Tambahkan honorarium senat ke total honorarium rapat
+                    $totalHonorariumSenat += $honorarium;
                     // Tambahkan honorarium senat ke total honorarium rapat
                     $totalHonorariumSenat += $honorarium;
 
@@ -311,7 +344,17 @@ public function printReport()
                     $honorariumsPerRapat[$rapat->id] = $honorarium;
                 }
             }
+                    // Simpan honorarium per rapat
+                    if (!isset($honorariumsPerRapat[$rapat->id])) {
+                        $honorariumsPerRapat[$rapat->id] = [];
+                    }
+                    $honorariumsPerRapat[$rapat->id] = $honorarium;
+                }
+            }
 
+            // Simpan total honorarium untuk senat ini dalam array
+            $honorariumsPerSenat[$senat->id] = $totalHonorariumSenat;
+        }
             // Simpan total honorarium untuk senat ini dalam array
             $honorariumsPerSenat[$senat->id] = $totalHonorariumSenat;
         }
@@ -325,6 +368,16 @@ public function printReport()
             'honorariumsPerSenat' => $honorariumsPerSenat,
         ]);
     }
+        // Tampilkan data ke view
+        return view('content.honor.honor-detail', [
+            'senats' => $senats,
+            'rapats' => $rapats,
+            'kehadirans' => $kehadirans,
+            'honorariumsPerRapat' => $honorariumsPerRapat,
+            'honorariumsPerSenat' => $honorariumsPerSenat,
+        ]);
+    }
+
 
 
 
@@ -369,7 +422,7 @@ public function printReport()
         $user->assignRole($request->role);
 
         // Redirect atau lakukan tindakan lainnya setelah berhasil membuat record
-        return redirect()->route('table.user')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'User berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -392,6 +445,6 @@ public function printReport()
         $user->delete();
         $senat->delete();
 
-        return response()->json(['message' => 'Data deleted successfully'], 200);
+        return redirect()->back()->with('success', 'Data berhasil dihapus.');
     }
 }

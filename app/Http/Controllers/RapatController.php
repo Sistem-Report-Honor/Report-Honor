@@ -64,7 +64,7 @@ class RapatController extends Controller
             'status' => 'prepare',
             'time_expired' => $expirationTime,
         ]);
-        return redirect()->route('list.rapat')->with('success', 'QR berhasil Dibuat.');
+        return redirect()->back()->with('success', 'Rapat berhasil Dibuat.');
     }
 
     public function kehadiran($id)
@@ -79,7 +79,7 @@ class RapatController extends Controller
         $rapat = Rapat::findOrFail($id);
         $rapat->status = 'mulai';
         $rapat->save();
-        return redirect()->route('list.rapat')->with('success', 'rapat berhasil Di Mulai');
+        return redirect()->back()->with('success', 'rapat berhasil Di Mulai');
     }
 
     public function statusSelesai($id)
@@ -95,7 +95,7 @@ class RapatController extends Controller
             }
         }
 
-        return redirect()->route('list.rapat')->with('success', 'rapat berhasil Di akhiri');
+        return redirect()->back()->with('success', 'rapat berhasil Di akhiri');
     }
 
 

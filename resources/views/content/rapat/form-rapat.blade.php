@@ -8,11 +8,6 @@
         <form action="{{ route('create.rapat') }}" method="POST">
             @csrf
             <div class="space-y-6">
-                {{-- <div>
-                    <label class="block text-xs font-semibold text-gray-900"> Nama Rapat </label>
-                    <input type="text" placeholder="Nama Rapat" name="nama_rapat"
-                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" required />
-                </div> --}}
                 <div>
                     <label class="block text-xs font-semibold text-gray-900"> Tanggal </label>
                     <input type="date" name="tanggal"
@@ -43,4 +38,20 @@
             </div>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    didClose: () => {
+                        window.location.href = '/rapat';
+                    }
+                });
+            @endif
+        });
+    </script>
 @endsection
