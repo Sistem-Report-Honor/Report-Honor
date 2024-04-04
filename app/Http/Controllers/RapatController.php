@@ -97,4 +97,12 @@ class RapatController extends Controller
 
         return redirect()->route('list.rapat')->with('success', 'rapat berhasil Di akhiri');
     }
+
+
+    public function printQR($id)
+{
+    $rapat = Rapat::findOrFail($id);
+    return view('content.rapat.print-qrcode', compact('rapat'));
+}
+
 }

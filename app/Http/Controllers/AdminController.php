@@ -11,6 +11,8 @@ use App\Models\Rapat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
@@ -35,36 +37,109 @@ class AdminController extends Controller
         return view('content.honor.honor-detail', ['rapats' => $rapats]);
     }
 
-    public function reportDasar()
-    {
+  // Di dalam kelas AdminController
 
-        $senats = Senat::with(['user', 'golongan'])->get();
+private function calculateHonorariums($senats)
+{
+    // Mengambil data kehadiran dengan verifikasi 'Hadir'
+    $kehadirans = Kehadiran::where('verifikasi', 'Hadir')->get();
 
-        // Mengambil data kehadiran dengan verifikasi 'Hadir'
-        $kehadirans = Kehadiran::where('verifikasi', 'Hadir')->get();
-
-        // Menghitung jumlah kehadiran untuk setiap anggota rapat
-        $jumlahKehadiran = [];
-        foreach ($senats as $senat) {
-            // Menghitung jumlah kehadiran berdasarkan id senat
-            $jumlahKehadiran[$senat->id] = $kehadirans->where('id_senat', $senat->id)->count();
-        }
-
-        $honorariumsPerSenat = [];
-        foreach ($senats as $senat) {
-            $golongan = $senat->golongan;
-            if ($golongan) {
-                $honorarium = $golongan->honor;
-                $pph = $golongan->pph;
-                $honorariumsPerSenat[$senat->id] = ($honorarium - $pph) * ($jumlahKehadiran[$senat->id] ?? 0);
-            } else {
-                // Atur nilai honorarium menjadi 0 jika golongan tidak ditemukan
-                $honorariumsPerSenat[$senat->id] = 0;
-            }
-        }
-
-        return view('content.honor.honor-dasar', ['senats' => $senats, 'honorariums' => $honorariumsPerSenat]);
+    // Menghitung jumlah kehadiran untuk setiap anggota rapat
+    $jumlahKehadiran = [];
+    foreach ($senats as $senat) {
+        // Menghitung jumlah kehadiran berdasarkan id senat
+        $jumlahKehadiran[$senat->id] = $kehadirans->where('id_senat', $senat->id)->count();
     }
+
+    // Menghitung honorarium untuk setiap anggota senat
+    $honorariumsPerSenat = [];
+    foreach ($senats as $senat) {
+        $golongan = $senat->golongan;
+        if ($golongan) {
+            $honorarium = $golongan->honor;
+            $pph = $golongan->pph;
+            $honorariumsPerSenat[$senat->id] = ($honorarium - $pph) * ($jumlahKehadiran[$senat->id] ?? 0);
+        } else {
+            // Atur nilai honorarium menjadi 0 jika golongan tidak ditemukan
+            $honorariumsPerSenat[$senat->id] = 0;
+        }
+    }
+
+    return $honorariumsPerSenat;
+}
+
+public function reportDasar()
+{
+    // Mendapatkan data Senat
+    $senats = Senat::with(['user', 'golongan'])->get();
+
+    // Menghitung honorariums
+    $honorariumsPerSenat = $this->calculateHonorariums($senats);
+
+    return view('content.honor.honor-dasar', ['senats' => $senats, 'honorariums' => $honorariumsPerSenat]);
+}
+public function printReport()
+{
+    // Buat instance Spreadsheet
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header kolom
+    $sheet->setCellValue('A1', 'No.');
+    $sheet->setCellValue('B1', 'Nomor Rekening');
+    $sheet->setCellValue('C1', 'Nama Rekening');
+    $sheet->setCellValue('D1', 'Honorarium');
+
+    // Mendapatkan data Senat
+    $senats = Senat::with(['user', 'golongan'])->get();
+
+    // Menghitung honorariums
+    $honorariumsPerSenat = $this->calculateHonorariums($senats);
+
+    // Mendefinisikan style untuk header
+    $headerStyle = [
+        'font' => ['bold' => true],
+        'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+        'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => 'CCCCCC']],
+    ];
+
+    // Terapkan style pada header
+    $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+
+    // Mendefinisikan lebar kolom dan style border untuk setiap kolom
+    $columnWidths = [10, 20, 30, 15]; // Lebar kolom dalam satuan karakter
+    foreach(range('A', 'D') as $columnKey => $column) {
+        $sheet->getColumnDimension($column)->setWidth($columnWidths[$columnKey]);
+        $sheet->getStyle($column . '1')->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]]]);
+    }
+
+    // Mengisi data ke dalam baris-baris selanjutnya
+    $row = 2;
+    foreach ($senats as $index => $senat) {
+        $sheet->setCellValue('A' . $row, $index + 1);
+        $sheet->setCellValue('B' . $row, $senat->no_rek);
+        $sheet->setCellValue('C' . $row, $senat->nama_rekening);
+        $sheet->setCellValue('D' . $row, isset($honorariumsPerSenat[$senat->id]) ? $honorariumsPerSenat[$senat->id] : 'N/A');
+
+        // Terapkan style border untuk setiap sel pada baris ini
+        foreach(range('A', 'D') as $column) {
+            $sheet->getStyle($column . $row)->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]]]);
+        }
+
+        $row++;
+    }
+
+    // Buat file Excel
+    $excel_file_path = public_path('storage/Reportdasar/report.xlsx'); // Sesuaikan dengan jalur yang tepat
+    $writer = new Xlsx($spreadsheet);
+    $writer->save($excel_file_path);
+
+    // Berikan file Excel untuk diunduh
+    return response()->download($excel_file_path, 'report.xlsx');
+}
+
+
+
 
     // public function reportDetail()
     // {
@@ -186,72 +261,72 @@ class AdminController extends Controller
 
 
     public function reportDetail()
-{
-    // Dapatkan semua senat dengan relasi yang diperlukan
-    $senats = Senat::with(['user', 'golongan', 'komisi'])->get();
+    {
+        // Dapatkan semua senat dengan relasi yang diperlukan
+        $senats = Senat::with(['user', 'golongan', 'komisi'])->get();
 
-    // Dapatkan semua rapat
-    $rapats = Rapat::all();
+        // Dapatkan semua rapat
+        $rapats = Rapat::all();
 
-    // Inisialisasi array untuk menyimpan kehadiran dan honorarium per rapat
-    $kehadirans = [];
-    $honorariumsPerRapat = [];
-    $honorariumsPerSenat = [];
+        // Inisialisasi array untuk menyimpan kehadiran dan honorarium per rapat
+        $kehadirans = [];
+        $honorariumsPerRapat = [];
+        $honorariumsPerSenat = [];
 
-    // Lakukan perulangan melalui semua senat
-    foreach ($senats as $senat) {
-        // Inisialisasi total honorarium untuk senat ini
-        $totalHonorariumSenat = 0;
+        // Lakukan perulangan melalui semua senat
+        foreach ($senats as $senat) {
+            // Inisialisasi total honorarium untuk senat ini
+            $totalHonorariumSenat = 0;
 
-        // Inisialisasi array kehadiran untuk senat ini di setiap rapat
-        $kehadirans[$senat->id] = [];
+            // Inisialisasi array kehadiran untuk senat ini di setiap rapat
+            $kehadirans[$senat->id] = [];
 
-        // Lakukan perulangan melalui semua rapat
-        foreach ($rapats as $rapat) {
-            // Periksa apakah senat hadir dalam rapat yang sedang diproses
-            $hadir = Kehadiran::where('id_senat', $senat->id)
-                ->where('id_rapat', $rapat->id)
-                ->where('verifikasi', 'Hadir')
-                ->exists();
+            // Lakukan perulangan melalui semua rapat
+            foreach ($rapats as $rapat) {
+                // Periksa apakah senat hadir dalam rapat yang sedang diproses
+                $hadir = Kehadiran::where('id_senat', $senat->id)
+                    ->where('id_rapat', $rapat->id)
+                    ->where('verifikasi', 'Hadir')
+                    ->exists();
 
-            // Simpan status kehadiran senat dalam rapat
-            $kehadirans[$senat->id][$rapat->id] = $hadir;
+                // Simpan status kehadiran senat dalam rapat
+                $kehadirans[$senat->id][$rapat->id] = $hadir;
 
-            if ($hadir) {
-                // Dapatkan informasi golongan senat yang hadir
-                $golongan = $senat->golongan;
+                if ($hadir) {
+                    // Dapatkan informasi golongan senat yang hadir
+                    $golongan = $senat->golongan;
 
-                // Hitung honorarium untuk senat ini pada rapat ini
-                $honors = $golongan ? $golongan->honor : 0;
-                $pphs = $golongan ? $golongan->pph : 0;
-                $honorarium = $honors - $pphs;
+                    // Hitung honorarium untuk senat ini pada rapat ini
+                    $honors = $golongan ? $golongan->honor : 0;
+                    $pphs = $golongan ? $golongan->pph : 0;
+                    $honorarium = $honors - $pphs;
 
-                // Tambahkan honorarium senat ke total honorarium rapat
-                $totalHonorariumSenat += $honorarium;
+                    // Tambahkan honorarium senat ke total honorarium rapat
+                    $totalHonorariumSenat += $honorarium;
 
-                // Simpan honorarium per rapat
-                if (!isset($honorariumsPerRapat[$rapat->id])) {
-                    $honorariumsPerRapat[$rapat->id] = [];
+                    // Simpan honorarium per rapat
+                    if (!isset($honorariumsPerRapat[$rapat->id])) {
+                        $honorariumsPerRapat[$rapat->id] = [];
+                    }
+                    $honorariumsPerRapat[$rapat->id] = $honorarium;
                 }
-                $honorariumsPerRapat[$rapat->id] = $honorarium;
             }
+
+            // Simpan total honorarium untuk senat ini dalam array
+            $honorariumsPerSenat[$senat->id] = $totalHonorariumSenat;
         }
 
-        // Simpan total honorarium untuk senat ini dalam array
-        $honorariumsPerSenat[$senat->id] = $totalHonorariumSenat;
+        // Tampilkan data ke view
+        return view('content.honor.honor-detail', [
+            'senats' => $senats,
+            'rapats' => $rapats,
+            'kehadirans' => $kehadirans,
+            'honorariumsPerRapat' => $honorariumsPerRapat,
+            'honorariumsPerSenat' => $honorariumsPerSenat,
+        ]);
     }
 
-    // Tampilkan data ke view
-    return view('content.honor.honor-detail', [
-        'senats' => $senats,
-        'rapats' => $rapats,
-        'kehadirans' => $kehadirans,
-        'honorariumsPerRapat' => $honorariumsPerRapat,
-        'honorariumsPerSenat' => $honorariumsPerSenat,
-    ]);
-}
 
-    
 
     public function create(Request $request)
     {

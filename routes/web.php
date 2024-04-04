@@ -45,11 +45,12 @@ use App\Http\Controllers\UserController;
     Route::post('/rapat/kehadiran/{id_rapat}',[AbsenController::class,'verif_selected'])->middleware('role:admin|pimpinan')->name('verif.selected');
     Route::post('/rapat/{id}/status/mulai', [RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
     Route::post('/rapat/{id}/status/selesai', [RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
+    Route::get('/print/{id}/qr', [RapatController::class, 'printQR'])->name('print.qr');
+
 
     Route::get('/honor/detail', [AdminController::class, 'reportDetail'])->middleware(['role:admin|keuangan'])->name('list.honor.detail');
-
     Route::get('/honor/dasar', [AdminController::class, 'reportDasar'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
-
+    Route::get('/honor/dasar/print-report', [AdminController::class, 'printReport'])->middleware(['role:admin|keuangan'])->name('print.honor.dasar');
     Route::get('/honor/dasar/pribadi', function () {
         return view('content.honor.honor-dasar-pribadi');
     })->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
