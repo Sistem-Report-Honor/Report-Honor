@@ -10,6 +10,7 @@ use App\Models\Senat;
 use App\Models\Rapat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -198,7 +199,10 @@ public function reportDetail() {
     ]));
 }
 
-public function reportPribadi($id_senat) {
+public function reportPribadi() {
+    // Dapatkan ID senat dari pengguna yang saat ini diautentikasi
+    $id_senat = Auth::user()->id_senat;
+
     // Dapatkan senat dengan ID yang diberikan bersama dengan relasinya
     $senat = Senat::with(['user', 'golongan', 'komisi'])->findOrFail($id_senat);
 
@@ -209,8 +213,9 @@ public function reportPribadi($id_senat) {
     $reportData = $this->generateReport([$senat], $rapats);
 
     // Tampilkan data ke view
-    return view('content.honor.honor', array_merge($reportData, [
+    return view('content.honor.honor-pribadi', array_merge($reportData, [
         'senat' => $senat,
+        'rapats' => $rapats,
     ]));
 }
 

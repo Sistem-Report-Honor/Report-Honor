@@ -9,11 +9,17 @@
         <table id="my-datatable" class="text-sm w-full bg-[#EBE9EE] rounded-lg">
             <thead>
                 <tr>
-                    <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10" rowspan="3">No.</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">Nama</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">GP</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">Jabatan dalam Senat</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">Komisi</th>
+
+                    @foreach ($rapats as $rapat)
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" colspan="3">
+                            <span class="block text-center">{{ $rapat->komisi->komisi }}</span>
+                            <span class="block text-center font-thin">{{ date('d M Y', strtotime($rapat->tanggal)) }}</span>
+                        </th>
+                    @endforeach
 
                     <!-- total honor perbulan -->
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" colspan="3">Total Honor Rapat Senat Bulan</th>
@@ -22,7 +28,16 @@
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="4">
                       <span class="text center">NPWP</span>
                     </th>
+                </tr>>
+                <!-- honor perapat -->
+                <tr>
+                    @foreach ($rapats as $rapat)
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Honor</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">PPH</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="2">Diterima</th>
+                    @endforeach
                 </tr>
+
                 <!-- honor perbulan -->
                 <tr>
                         <th class="whitespace-nowrap px-5 py-2 font-medium text-gray-900">Honor</th>
@@ -32,9 +47,8 @@
             </thead>
 
             <tbody>
-            @foreach ($senats as $senat)
+            @if ($senat)
             <tr>
-                <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">{{ $loop->iteration }}</td>
                 <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">{{ $senat->name }}</td>
                 <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $senat->golongan->golongan ?? '-' }}</td>
                 <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $senat->jabatan }}</td>
@@ -62,7 +76,7 @@
 
                 <td class="whitespace-nowrap px-4 py-2 text-gray-900 border-b border-gray-400">{{ $senat->NPWP }}</td>
            </tr>
-           @endforeach
+           @endif
         </tbody>
         </table>
     </div>
