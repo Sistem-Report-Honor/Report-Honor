@@ -16,8 +16,10 @@
                 </div>
             </div>
 
+
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
                 <ul class="uppercase flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-transparent">
+                @if (Auth::user()->hasRole('admin'))
                     <li>
                         <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownUser" class="flex items-center justify-between w-full py-2 px-3 roundedmd:hover:bg-transparent md:border-0 md:p-0 md:w-auto uppercase">User <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
@@ -66,6 +68,57 @@
                             </ul>
                         </div>
                     </li>
+                    @endif
+
+                    @if (Auth::user()->hasRole('pimpinan'))
+                    <li>
+                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownRapat" class="flex items-center justify-between w-full py-2 px-3 roundedmd:hover:bg-transparent md:border-0 md:p-0 md:w-auto uppercase">Rapat <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                            </svg></button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownRapat" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+                            <ul class="py-2 text-sm text-gray-700 capitalize" aria-labelledby="dropdownLargeButton">
+                                <li>
+                                    <a href="{{ route('list.rapat') }}" class="block px-4 py-2 hover:bg-gray-100">Rapat List</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('form.rapat') }}" class="block px-4 py-2 hover:bg-gray-100">Rapat Create</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="{{ route('list.honor.dasar.pribadi') }}"
+                            class="flex items-center justify-between w-full py-2 px-3 roundedmd:hover:bg-transparent md:border-0 md:p-0 md:w-auto uppercase">
+                            Honor Dasar Pribadi
+                        </a>
+                    </li>
+                    @endif
+
+                    @if (Auth::user()->hasRole('keuangan'))
+                    <li>
+                        <a href="{{ route('list.honor.dasar') }}"
+                            class="flex items-center justify-between w-full py-2 px-3 roundedmd:hover:bg-transparent md:border-0 md:p-0 md:w-auto uppercase">
+                            Honor Dasar
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="{{ route('list.honor.detail') }}"
+                            class="flex items-center justify-between w-full py-2 px-3 roundedmd:hover:bg-transparent md:border-0 md:p-0 md:w-auto uppercase">
+                            Honor Detail
+                        </a>
+                    </li>
+                    @endif
+
+                    @if (Auth::user()->hasRole('anggota'))
+                    <li>
+                        <a href="{{ route('list.honor.dasar.pribadi') }}"
+                            class="flex items-center justify-between w-full py-2 px-3 roundedmd:hover:bg-transparent md:border-0 md:p-0 md:w-auto uppercase">
+                            Honor Dasar Pribadi
+                        </a>
+                    </li>
+                    @endif
                 </ul>
             </div>
 
