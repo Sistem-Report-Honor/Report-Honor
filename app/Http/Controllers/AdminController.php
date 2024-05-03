@@ -11,8 +11,7 @@ use App\Models\Rapat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
@@ -82,7 +81,7 @@ class AdminController extends Controller
         $golongan = Golongan::all();
         $role = Role::all();
         $komisi = Komisi::all();
-        
+
         return view('content.user.edit-user', [
             'user' => $user,
             'golongan' => $golongan,
@@ -90,7 +89,7 @@ class AdminController extends Controller
             'komisi' => $komisi,
         ]);
     }
-    
+
 
     public function update(Request $request, $id)
     {
