@@ -55,13 +55,17 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/honor/detail', [ReportController::class, 'reportDetail'])->middleware(['role:admin|keuangan'])->name('list.honor.detail');
     Route::get('/honor/dasar', [ReportController::class, 'reportDasar'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
     Route::get('/honor/dasar/print-report', [ReportController::class, 'printReport'])->middleware(['role:admin|keuangan'])->name('print.honor.dasar');
+    Route::get('/honor/detail/print-report', [ReportController::class, 'printReportDetail'])->middleware(['role:admin|keuangan'])->name('print.honor.detail');
     Route::get('/honor/dasar/pribadi', [ReportController::class, 'reportPribadi'])->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
+    Route::get('/honor/dasar/pribadi/print-report', [ReportController::class, 'printReportPribadi'])->middleware(['role:pimpinan|anggota'])->name('print.honor.pribadi');
 
     // Route::get('/absen/user', [UserController::class, 'kehadiran'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
 
     Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
 
-    Route::get('/account/change_password', [UserController::class, 'password'])->name('change.password');
+    Route::get('/account/change_password', [UserController::class, 'passwordForm'])->name('change.password.form');
+
+    Route::post('/account/change_password', [UserController::class, 'changePassword'])->name('change.password');
 });
 
 

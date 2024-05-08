@@ -6,7 +6,7 @@
             <h1 class="text-2xl font-bold capitalize">{{ Auth::user()->name }}</h1>
             <div class="w-full h-[2px] bg-[#666] my-4"></div>
             <div class="p-4 space-y-4">
-                <a href=""
+                <a href="{{ route('change.password') }}"
                     class="flex items-center justify-between rounded-lg bg-[#6E2BB1] px-4 py-2.5 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">
                     <span>Ubah Password</span>
                     <i class='bx bxs-chevron-right text-[1rem]'></i>
