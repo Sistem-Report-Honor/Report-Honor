@@ -30,7 +30,7 @@
                 </div>
             @else
                 @foreach ($filteredRapats as $rapat)
-                    <div class="bg-white rounded-lg p-4 shadow-sm shadow-indigo-200 w-fit h-fit">
+                    <div class="bg-white rounded-lg p-4 shadow-sm shadow-indigo-200 w-full h-fit">
                         <div class="relative">
                             <img alt="QR Code" src="{{ asset('storage/' . $rapat->qr_code) }}"
                                 class="h-fit w-full rounded-md object-cover border" />
@@ -50,7 +50,7 @@
                                 </div>
                             @endif
 
-                            <div class="mt-4 flex items-center gap-6 text-xs justify-evenly bg-[#faf5ff] p-2.5 rounded-md">
+                            <div class="mt-4 flex grid lg:grid-cols-2 gap-6 text-xs justify-evenly bg-[#faf5ff] p-2.5 rounded-md">
                                 <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
                                     <i class='bx bx-calendar text-xl text-[#6e2bb1]'></i>
                                     <div class="mt-1.5 sm:mt-0">
@@ -62,7 +62,7 @@
                                 <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
                                     <i class='bx bx-time text-xl text-[#6e2bb1]'></i>
                                     <div class="mt-1.5 sm:mt-0">
-                                        <p class="text-gray-500">Jam Mulai</p>
+                                        <p class="text-gray-500">Jam</p>
                                         <p class="font-medium">{{ $rapat->jam }} WIB</p>
                                     </div>
                                 </div>

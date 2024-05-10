@@ -6,7 +6,7 @@
             <h1 class="text-2xl font-bold capitalize">{{ Auth::user()->name }}</h1>
             <div class="w-full h-[2px] bg-[#666] my-4"></div>
             <div class="p-4 space-y-4">
-                <a href=""
+                <a href="{{ route('change.password') }}"
                     class="flex items-center justify-between rounded-lg bg-[#6E2BB1] px-4 py-2.5 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">
                     <span>Ubah Password</span>
                     <i class='bx bxs-chevron-right text-[1rem]'></i>
@@ -28,20 +28,20 @@
             <div class="p-6 space-y-6">
                 <div>
                     <label class="block text-xs font-semibold text-gray-900"> Nama Lengkap </label>
-                    <input type="text" placeholder="Nama Lengkap" name="name"
-                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm"
-                        value="{{ Auth::user()->name }}" required />
+                    <span class="mt-1 w-full max-w-[55vw] font-semibold sm:text-sm" required />{{ Auth::user()->name }}
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-900"> NIP </label>
-                    <input type="text" placeholder="NIP" name="nip"
-                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" required />
+                    <span class="mt-1 w-full max-w-[55vw] font-semibold sm:text-sm" required />        
+                    @if ($user->senat)
+                    {{ $user->senat->nip ?? 'N/A' }}
+                    @else
+                    N/A
+                    @endif
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-900"> Username </label>
-                    <input type="text" placeholder="Username" name="username"
-                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm"
-                        value="{{ Auth::user()->username }}" required />
+                    <span class="mt-1 w-full max-w-[55vw] font-semibold sm:text-sm" required />{{ Auth::user()->username }}
                 </div>
             </div>
         </div>

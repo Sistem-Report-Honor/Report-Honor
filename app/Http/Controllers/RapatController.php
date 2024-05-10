@@ -84,6 +84,7 @@ class RapatController extends Controller
 
     public function statusSelesai($id)
     {
+        
         $rapat = Rapat::findOrFail($id);
         $rapat->status = 'selesai';
         $rapat->save();

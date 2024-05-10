@@ -58,8 +58,11 @@
                 <select id="id_komisi" name="id_komisi" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5" required>
                     <option value="" selected>Pilih</option>
                     @foreach ($komisis as $komisi)
+                    @if ($komisi->id !== 4)
                     <option value="{{ $komisi->id }}">{{ $komisi->komisi }}</option>
+                    @endif
                     @endforeach
+
                 </select>
             </div>
 
