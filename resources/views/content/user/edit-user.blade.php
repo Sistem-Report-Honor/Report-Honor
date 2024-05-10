@@ -10,7 +10,7 @@
     <!-- Validation Errors -->
     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-    <form action="{{route('edit.user.post',$user->id)}}" method="POST">
+    <form id="editUser" action="{{route('edit.user.post',$user->id)}}" method="POST">
         @csrf
         <div class="space-y-6">
             <div>
@@ -67,8 +67,8 @@
             <div>
                 <label class="block text-xs font-semibold text-gray-900 mt-2" for="role">Role</label>
                 <select id="role" name="role" class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5" required>
-                    <option value="" selected>Pilih</option>
                     @foreach ($role as $item)
+                    <option value="" selected>{{ $item->name }}</option>
                     <option value="{{ $item->name }}">{{ $item->name }}</option>
                     @endforeach
                 </select>
@@ -81,4 +81,47 @@
         </div>
     </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+// Ambil elemen form
+const form = document.getElementById('editUser');
+
+// Tambahkan event listener untuk mengirimkan form
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Mencegah pengiriman form default
+
+    // Kirim form menggunakan AJAX
+    fetch(this.action, {
+        method: this.method,
+        body: new FormData(this),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Tampilkan SweetAlert ketika kata sandi berhasil diubah
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data User berhasil diubah.',
+            }).then(() => {
+                // Redirect ke halaman lain jika perlu
+                window.location.href = '/table-user';
+            });
+        } else {
+            // Tampilkan pesan error jika ada kesalahan
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.message,
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+
 @endsection

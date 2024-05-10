@@ -64,8 +64,9 @@
                                 View
                             </a>
                             <form id="deleteForm" action="{{ route('delete.user', $user->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" onclick="confirmDelete(event)"
+                            @csrf
+                            @method('DELETE') <!-- Menentukan bahwa ini adalah metode DELETE -->
+                                <button type="submit"
                                     class="inline-block rounded bg-[#c23c44] px-4 py-2 text-xs font-medium text-white hover:bg-[#d75c5d] transition-all">
                                     Delete
                                 </button>

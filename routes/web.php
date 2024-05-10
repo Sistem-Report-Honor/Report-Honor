@@ -38,9 +38,9 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/user/table', [AdminController::class, 'table'])->middleware(['role:admin'])->name('table.user');
     Route::get('/user/form', [AdminController::class, 'form'])->middleware(['role:admin'])->name('form.user');
     Route::post('/user/form/create', [AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
-    Route::get('/user/table/edit/{id}', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user');
-    Route::post('/user/table/edit/{id}/post', [AdminController::class, 'edit'])->middleware(['role:admin'])->name('edit.user.post');
-    Route::post('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
+    Route::get('/user/table/edit/{id}', [AdminController::class, 'view'])->middleware(['role:admin'])->name('edit.user');
+    Route::post('/user/table/edit/{id}/post', [AdminController::class, 'update'])->middleware(['role:admin'])->name('edit.user.post');
+    Route::delete('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
 
     Route::get('/rapat', [RapatController::class, 'table'])->middleware(['role:admin|pimpinan'])->name('list.rapat');
     Route::get('/rapat/form', [RapatController::class, 'form'])->middleware(['role:admin|pimpinan'])->name('form.rapat');
