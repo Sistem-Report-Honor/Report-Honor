@@ -26,28 +26,26 @@ class UserController extends Controller
 
     public function changePassword(Request $request)
     {
-
         $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|min:8|different:current_password',
             'confirm_password' => 'required|same:new_password',
         ]);
-
+    
         $userId = Auth::id();
-
+    
         $user = User::find($userId);
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->with('error', 'Kata sandi saat ini salah.');
+            return response()->json(['success' => false, 'message' => 'Kata sandi saat ini salah.'], 422);
         }
-
+    
         $user->update([
             'password' => Hash::make($request->new_password),
         ]);
-
-        return view('content.account.detail-account')->with('success', 'Kata sandi berhasil diubah.');
-
+    
+        return response()->json(['success' => true, 'message' => 'Kata sandi berhasil diubah.']);
     }
-
+    
 
     public function detail(Request $request)
     {
