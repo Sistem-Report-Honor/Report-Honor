@@ -219,7 +219,6 @@
             const tabs = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
 
-            // Menampilkan konten Rapat Sekarang secara default
             document.getElementById('rapat-sekarang').classList.remove('hidden');
             document.querySelector('[data-tab="rapat-sekarang"]').classList.add('text-[#6E2BB1]',
                 'border-[#6E2BB1]');
