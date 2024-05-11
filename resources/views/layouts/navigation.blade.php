@@ -287,7 +287,6 @@
                     </x-responsive-nav-link>
                 </ul>
             </details>
-            @endif
 
             @if (Auth::user()->hasRole('pimpinan'))
             <details class="group [&_summary::-webkit-details-marker]:hidden">
