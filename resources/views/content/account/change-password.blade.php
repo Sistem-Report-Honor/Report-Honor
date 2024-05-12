@@ -102,6 +102,26 @@ form.addEventListener('submit', function(event) {
         body: new FormData(this),
     })
     .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Tampilkan SweetAlert ketika kata sandi berhasil diubah
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Kata sandi berhasil diubah.',
+            }).then(() => {
+                // Redirect ke halaman lain jika perlu
+                window.location.href = '{{ route("account.detail") }}';
+            });
+        } else {
+            // Tampilkan pesan error jika ada kesalahan
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.message,
+            });
+        }
+    })
     .catch(error => {
         console.error('Error:', error);
     });

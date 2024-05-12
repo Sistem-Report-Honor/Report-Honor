@@ -884,12 +884,6 @@ select {
 .h-\[115px\] {
   height: 115px;
 }
-.h-\[140px\] {
-  height: 140px;
-}
-.h-\[198px\] {
-  height: 198px;
-}
 .h-\[1px\] {
   height: 1px;
 }
@@ -898,6 +892,9 @@ select {
 }
 .h-\[2px\] {
   height: 2px;
+}
+.h-\[301px\] {
+  height: 301px;
 }
 .h-\[69px\] {
   height: 69px;
@@ -911,9 +908,6 @@ select {
 }
 .h-screen {
   height: 100vh;
-}
-.h-\[501px\] {
-  height: 501px;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -948,9 +942,6 @@ select {
 .w-8 {
   width: 2rem;
 }
-.w-\[581px\] {
-  width: 581px;
-}
 .w-auto {
   width: auto;
 }
@@ -966,6 +957,10 @@ select {
 }
 .min-w-56 {
   min-width: 14rem;
+}
+.min-w-fit {
+  min-width: -moz-fit-content;
+  min-width: fit-content;
 }
 .max-w-6xl {
   max-width: 72rem;
@@ -1031,8 +1026,14 @@ select {
 .flex-col {
   flex-direction: column;
 }
+.flex-wrap {
+  flex-wrap: wrap;
+}
 .place-items-center {
   place-items: center;
+}
+.items-end {
+  align-items: flex-end;
 }
 .items-center {
   align-items: center;
@@ -1058,9 +1059,6 @@ select {
 .gap-10 {
   gap: 2.5rem;
 }
-.gap-14 {
-  gap: 3.5rem;
-}
 .gap-2 {
   gap: 0.5rem;
 }
@@ -1069,6 +1067,12 @@ select {
 }
 .gap-6 {
   gap: 1.5rem;
+}
+.gap-8 {
+  gap: 2rem;
+}
+.gap-y-2 {
+  row-gap: 0.5rem;
 }
 .space-x-3 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
@@ -1251,10 +1255,6 @@ select {
 .bg-white\/10 {
   background-color: rgb(255 255 255 / 0.1);
 }
-.bg-red-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-}
 .bg-opacity-60 {
   --tw-bg-opacity: 0.6;
 }
@@ -1271,6 +1271,9 @@ select {
 }
 .bg-cover {
   background-size: cover;
+}
+.bg-no-repeat {
+  background-repeat: no-repeat;
 }
 .fill-current {
   fill: currentColor;
@@ -1361,6 +1364,9 @@ select {
 .pb-1 {
   padding-bottom: 0.25rem;
 }
+.pb-20 {
+  padding-bottom: 5rem;
+}
 .pb-3 {
   padding-bottom: 0.75rem;
 }
@@ -1385,6 +1391,9 @@ select {
 .pt-8 {
   padding-top: 2rem;
 }
+.pl-1 {
+  padding-left: 0.25rem;
+}
 .text-left {
   text-align: left;
 }
@@ -1408,10 +1417,6 @@ select {
 }
 .text-5xl {
   font-size: 3rem;
-  line-height: 1;
-}
-.text-8xl {
-  font-size: 6rem;
   line-height: 1;
 }
 .text-\[1rem\] {
@@ -1475,6 +1480,9 @@ select {
 }
 .leading-8 {
   line-height: 2rem;
+}
+.leading-none {
+  line-height: 1;
 }
 .tracking-wide {
   letter-spacing: 0.025em;
@@ -1544,6 +1552,15 @@ select {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.text-black\/20 {
+  color: rgb(0 0 0 / 0.2);
+}
+.text-black\/80 {
+  color: rgb(0 0 0 / 0.8);
+}
+.text-black\/90 {
+  color: rgb(0 0 0 / 0.9);
 }
 .underline {
   text-decoration-line: underline;
@@ -2001,8 +2018,20 @@ select {
     margin-bottom: 2.5rem;
   }
 
+  .lg\:mt-14 {
+    margin-top: 3.5rem;
+  }
+
   .lg\:mt-36 {
     margin-top: 9rem;
+  }
+
+  .lg\:mt-5 {
+    margin-top: 1.25rem;
+  }
+
+  .lg\:mt-6 {
+    margin-top: 1.5rem;
   }
 
   .lg\:block {
@@ -2013,6 +2042,10 @@ select {
     display: flex;
   }
 
+  .lg\:h-\[501px\] {
+    height: 501px;
+  }
+
   .lg\:w-2\/6 {
     width: 33.333333%;
   }
@@ -2021,8 +2054,8 @@ select {
     width: 60%;
   }
 
-  .lg\:w-\[875px\] {
-    width: 875px;
+  .lg\:w-full {
+    width: 100%;
   }
 
   .lg\:max-w-\[35vw\] {
@@ -2045,8 +2078,37 @@ select {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .lg\:gap-14 {
+    gap: 3.5rem;
+  }
+
+  .lg\:gap-8 {
+    gap: 2rem;
+  }
+
+  .lg\:gap-4 {
+    gap: 1rem;
+  }
+
+  .lg\:gap-2 {
+    gap: 0.5rem;
+  }
+
+  .lg\:gap-6 {
+    gap: 1.5rem;
+  }
+
+  .lg\:p-10 {
+    padding: 2.5rem;
+  }
+
   .lg\:p-6 {
     padding: 1.5rem;
+  }
+
+  .lg\:px-16 {
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
 
   .lg\:px-8 {
@@ -2054,9 +2116,42 @@ select {
     padding-right: 2rem;
   }
 
+  .lg\:py-10 {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
   .lg\:text-3xl {
     font-size: 1.875rem;
     line-height: 2.25rem;
+  }
+
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .lg\:text-8xl {
+    font-size: 6rem;
+    line-height: 1;
+  }
+
+  .lg\:text-\[30px\] {
+    font-size: 30px;
+  }
+
+  .lg\:text-\[64px\] {
+    font-size: 64px;
+  }
+
+  .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .lg\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 @media (prefers-color-scheme: dark) {

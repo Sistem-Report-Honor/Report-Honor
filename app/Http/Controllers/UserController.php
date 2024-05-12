@@ -48,6 +48,7 @@ class UserController extends Controller
 
     }
     
+
     public function detail(Request $request)
     {
         $user = Auth::user();
