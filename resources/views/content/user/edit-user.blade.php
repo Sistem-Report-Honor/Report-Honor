@@ -68,7 +68,6 @@
                 <label class="block text-xs font-semibold text-gray-900 mt-2" for="role">Role</label>
                 <select id="role" name="role" class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5" required>
                     @foreach ($role as $item)
-                    <option value="" selected>{{ $item->name }}</option>
                     <option value="{{ $item->name }}">{{ $item->name }}</option>
                     @endforeach
                 </select>

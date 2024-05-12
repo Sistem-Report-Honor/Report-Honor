@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
+
 <body>
     <div class="bg-white min-h-screen">
         @include('layouts.navigation-absensi')
@@ -30,8 +31,15 @@
                                     required>
                                     <option value="" selected>Pilih</option>
                                     @foreach ($senats as $senat)
-                                        <option value="{{ $senat->id }}">{{ $senat->nip }} - {{ $senat->name }}
+                                    @php
+                                    $hadir = in_array($senat->id, $kehadiran);
+                                    @endphp
+                                    @if (!$hadir)
+                                        <option value="{{ $senat->id }}">
+                                            {{ $senat->nip }} - {{ $senat->name }}
                                         </option>
+                                    @endif
+                                             
                                     @endforeach
                                 </select>
                             </div>
@@ -72,7 +80,6 @@
                     </form>
                 @endif
             </div>
-
     </div>
     </main>
 

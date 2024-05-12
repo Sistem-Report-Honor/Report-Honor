@@ -81,7 +81,7 @@
                                         @csrf
                                         <button type="submit" onclick="confirmStartMeeting(event)"
                                             class="w-full flex items-center justify-center gap-2 hover:gap-2.5 rounded-md bg-[#6E2BB1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">
-                                            <span class="block">Mulai Rapat</span>
+                                            <span class="block">Mulai Absen</span>
                                             <i class='bx bxs-chevron-right mt-0.5 text-[1rem]'></i>
                                         </button>
                                     </form>
@@ -90,7 +90,7 @@
                                         @csrf
                                         <button type="submit" onclick="confirmEndMeeting(event)"
                                             class="w-full flex items-center justify-center gap-2 rounded-md bg-[#c23c44] px-4 py-2 text-xs font-semibold text-white hover:bg-[#d75c5d] transition-all">
-                                            <span>Akhiri Rapat</span>
+                                            <span>Akhiri Absen</span>
                                         </button>
                                     </form>
                                 @endif

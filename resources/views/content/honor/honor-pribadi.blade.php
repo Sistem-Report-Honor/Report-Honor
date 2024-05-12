@@ -17,7 +17,7 @@
         <a href="{{ route('print.honor.detail') }}" class="inline-block rounded-md bg-[#6E2BB1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">Print Report</a>
     </div>
 <div class="overflow-x-auto">
-    <table id="my-datatable" class="text-sm w-full bg-[#EBE9EE] rounded-lg">
+    <table id="my-datatable" class="text-sm bg-[#EBE9EE] rounded-lg">
         <thead>
             <tr>
                 <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900" rowspan="3">Nama</th>

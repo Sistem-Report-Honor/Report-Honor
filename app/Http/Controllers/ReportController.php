@@ -411,12 +411,6 @@ class ReportController extends Controller
 
 
 
-
-
-
-
-
-
     private function generateReport($senats, $rapats)
     {
         // Inisialisasi array untuk menyimpan kehadiran dan honorarium per rapat
@@ -504,6 +498,7 @@ class ReportController extends Controller
             'rapats' => $rapats,
             'bulan' => $bulan,
         ]));
+        
     }
 
     public function reportPribadi(Request $request)
