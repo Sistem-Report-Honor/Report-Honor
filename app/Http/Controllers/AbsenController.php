@@ -14,16 +14,41 @@ class AbsenController extends Controller
 {
     public function absen($kode_unik, $id_komisi)
     {
-        $senat = '';
-        if ($id_komisi == '4') {
-            $senat = Senat::all();
-        } else {
-            $senat = Senat::where('id_komisi', $id_komisi)->get();
-        }
+        // Mendapatkan semua anggota Senat berdasarkan id komisi
+        $senat = ($id_komisi == '4') ? Senat::all() : Senat::where('id_komisi', $id_komisi)->get();
+
+        // Mendapatkan informasi rapat berdasarkan kode unik
         $rapat = Rapat::where('kode_unik', $kode_unik)->first();
+
+        // Membuat array untuk menyimpan id Senat yang sudah absen
+        $senatYangSudahAbsen = [];
+
+        // Jika informasi rapat ditemukan
+        if ($rapat) {
+            // Mendapatkan semua kehadiran pada rapat tersebut
+            $kehadiran = Kehadiran::where('id_rapat', $rapat->id)->get();
+
+            // Mengisi array $senatYangSudahAbsen dengan id Senat yang sudah absen pada rapat tersebut
+            foreach ($kehadiran as $absen) {
+                $senatYangSudahAbsen[] = $absen->id_senat;
+            }
+        }
+
+        // Menyiapkan array Senat yang belum absen pada rapat tersebut
+        $senatBelumAbsen = [];
+
+        // Memeriksa setiap anggota Senat apakah sudah absen atau belum
+        foreach ($senat as $anggota) {
+            if (!in_array($anggota->id, $senatYangSudahAbsen)) {
+                // Jika belum absen, tambahkan ke array Senat yang belum absen
+                $senatBelumAbsen[] = $anggota;
+            }
+        }
+
         // Lakukan sesuatu dengan kode unik yang diterima
-        return view('content.absen.absen', ['rapat' => $rapat, 'senats' => $senat,'id_komisi'=>$id_komisi]);
+        return view('content.absen.absen', ['rapat' => $rapat, 'senats' => $senatBelumAbsen, 'id_komisi' => $id_komisi]);
     }
+
 
     public function kehadiran(Request $request)
     {
@@ -42,8 +67,8 @@ class AbsenController extends Controller
         // Periksa apakah kata sandi yang diberikan sama dengan kata sandi pengguna
         if (Hash::check($request->password, $user->password)) {
             // Periksa apakah id_senat sudah ada dalam tabel Kehadiran
-            if (Kehadiran::where(['id_senat'=> $request->id_senat ,'id_rapat'=>$request->id_rapat])->exists()) {
-                return redirect()->back()->with('error','Kehadiran Sudah Dicatat Sebelumnya');
+            if (Kehadiran::where(['id_senat' => $request->id_senat, 'id_rapat' => $request->id_rapat])->exists()) {
+                return redirect()->back()->with('error', 'Kehadiran Sudah Dicatat Sebelumnya');
             }
 
             // Jika cocok, buat kehadiran
@@ -53,33 +78,33 @@ class AbsenController extends Controller
                 'waktu' => now(),
                 'verifikasi' => 'Absen'
             ]);
-            return redirect()->back()->with('success','Berhasil Absen');
+            return redirect()->back()->with('success', 'Berhasil Absen');
         } else {
             // Jika kata sandi tidak cocok, kembalikan respon dengan kesalahan
-            return redirect()->back()->with('error','Password tidak cocok');
+            return redirect()->back()->with('error', 'Password tidak cocok');
         }
     }
 
-    public function verif_selected(Request $request, $id_rapat) {
+    public function verif_selected(Request $request, $id_rapat)
+    {
         $status = $request->input('status');
-    
-        if($request->input('selected_senats') == null){
-            return redirect()->back()->with('error','Tidak Ada Data Yang di pilih');
-        }else{
+
+        if ($request->input('selected_senats') == null) {
+            return redirect()->back()->with('error', 'Tidak Ada Data Yang di pilih');
+        } else {
             if ($status == 'Hadir' || $status == 'Tidak Hadir') {
                 $selectedSenats = explode(',', $request->input('selected_senats'));
                 Kehadiran::whereIn('id_senat', $selectedSenats)
                     ->where('id_rapat', $id_rapat)
                     ->update(['verifikasi' => $status]);
-        
+
                 return redirect()->back()->with('success', 'Verifikasi Berhasil');
             }
         }
-        
-    
+
+
         // Handle jika status tidak valid
-    
+
         return redirect()->back()->with('error', 'Status tidak valid');
     }
-    
 }
