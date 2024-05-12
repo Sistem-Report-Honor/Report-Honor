@@ -1,5 +1,5 @@
-<x-app-layout>
-    <div class="p-10">
+<x-app-layout> 
+    <div class="pb-20">
         @yield('content')
     </div>
 </x-app-layout>

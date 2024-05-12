@@ -1,7 +1,8 @@
 @extends('dashboard')
 
 @section('content')
-    <h1 class="text-3xl font-semibold mb-10">Report Honor</h1>
+    <div class="p-10">
+        <h1 class="text-3xl font-semibold mb-10">Report Honor</h1>
     <div class="flex justify-end mb-4">
     <form action="{{ route('list.honor.detail') }}" method="GET">
         <label for="bulan" class="mr-2">Pilih Bulan:</label>
@@ -108,5 +109,6 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
     </div>
 @endsection
