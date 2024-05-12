@@ -34,7 +34,7 @@ class UserController extends Controller
         ]);
 
         $userId = Auth::id();
-
+        $users = Auth::user();
         $user = User::find($userId);
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->with('error', 'Kata sandi saat ini salah.');
@@ -44,14 +44,14 @@ class UserController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
 
-        return view('content.dashboard')->with('success', 'Kata sandi berhasil diubah.');
-
+        return view('content.account.detail-account', ['user' => $users]);
 
     }
 
 
     public function detail(Request $request)
     {
-        return view('content.account.detail-account');
+        $user = Auth::user();
+        return view('content.account.detail-account', ['user' => $user]);
     }
 }

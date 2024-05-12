@@ -8,6 +8,10 @@ use Carbon\Carbon;
 use App\Models\Rapat;
 use Illuminate\Http\Request;
 use LaravelQRCode\Facades\QRCode;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Support\Facades\Storage;
+
 
 class RapatController extends Controller
 {
@@ -84,6 +88,7 @@ class RapatController extends Controller
 
     public function statusSelesai($id)
     {
+
         $rapat = Rapat::findOrFail($id);
         $rapat->status = 'selesai';
         $rapat->save();
@@ -104,5 +109,40 @@ class RapatController extends Controller
     $rapat = Rapat::findOrFail($id);
     return view('content.rapat.print-qrcode', compact('rapat'));
 }
+
+
+
+public function generatePDF($id)
+{
+    $rapat = Rapat::findOrFail($id);
+
+
+    $dompdf = new Dompdf();
+
+    $html = "
+    <div style='text-align: center; margin-bottom: 300px;'>
+        <h1 style='font-size: 50px; margin-bottom: 20px;'>{$rapat->komisi->komisi}</h1>
+        <p style='font-size: 15px;'>Tanggal: {$rapat->tanggal}</p>
+        <p>Jam: {$rapat->jam}</p>
+    </div>
+    ";
+
+    $dompdf->loadHtml($html);
+
+
+    $dompdf->render();
+    $canvas = $dompdf->getCanvas();
+    $qrCodePath = public_path("storage/{$rapat->qr_code}");
+    $imageSize = getimagesize($qrCodePath);
+    $imageWidth = $imageSize[0] * 1.5;
+    $imageHeight = $imageSize[1] * 1.5;
+    $canvas->image($qrCodePath, 100, 200, $imageWidth, $imageHeight);
+
+    $fileName = "{$rapat->komisi->komisi}_{$rapat->tanggal}.pdf";
+
+    return $dompdf->stream($fileName);
+}
+
+
 
 }

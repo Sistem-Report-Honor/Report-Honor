@@ -23,8 +23,6 @@ class ReportController extends Controller
 {
 
 
-
-
     private function calculateHonorariums($senats)
     {
         // Mengambil data kehadiran dengan verifikasi 'Hadir'
@@ -64,8 +62,6 @@ class ReportController extends Controller
 
         return view('content.honor.honor-dasar', ['senats' => $senats, 'honorariums' => $honorariumsPerSenat]);
     }
-
-
 
 
 
@@ -415,12 +411,6 @@ class ReportController extends Controller
 
 
 
-
-
-
-
-
-
     private function generateReport($senats, $rapats)
     {
         // Inisialisasi array untuk menyimpan kehadiran dan honorarium per rapat
@@ -508,6 +498,7 @@ class ReportController extends Controller
             'rapats' => $rapats,
             'bulan' => $bulan,
         ]));
+        
     }
 
     public function reportPribadi(Request $request)
