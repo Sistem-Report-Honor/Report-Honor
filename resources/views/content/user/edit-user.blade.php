@@ -1,7 +1,8 @@
 @extends('dashboard')
 
 @section('content')
-<h1 class="text-3xl font-semibold mb-10">Detail User</h1>
+<div class="p-10">
+    <h1 class="text-3xl font-semibold mb-10">Detail User</h1>
 <div class="w-full h-[1px] bg-[#666]"></div>
 <div class="p-6">
     <!-- Session Status -->
@@ -79,6 +80,7 @@
             </button>
         </div>
     </form>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

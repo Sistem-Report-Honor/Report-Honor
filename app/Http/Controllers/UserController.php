@@ -43,8 +43,10 @@ class UserController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
     
-        return response()->json(['success' => true, 'message' => 'Kata sandi berhasil diubah.']);
+        // Instead of using response()->json(), you can directly return a response
+        return redirect()->route('account.detail')->with('status', 'Kata sandi berhasil diubah.');
     }
+    
     
 
     public function detail(Request $request)

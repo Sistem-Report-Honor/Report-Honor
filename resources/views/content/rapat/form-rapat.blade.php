@@ -1,7 +1,8 @@
 @extends('dashboard')
 
 @section('content')
-    <h1 class="text-3xl font-semibold mb-10">Create Rapat</h1>
+    <div class="p-10">
+        <h1 class="text-3xl font-semibold mb-10">Create Rapat</h1>
     <div class="w-full h-[1px] bg-[#666]"></div>
     <div class="p-6">
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
@@ -37,6 +38,7 @@
                 </button>
             </div>
         </form>
+    </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
