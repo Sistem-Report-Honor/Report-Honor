@@ -47,7 +47,7 @@ class UserController extends Controller
         return view('content.account.detail-account')->with('success', 'Kata sandi berhasil diubah.');
 
     }
-
+    
 
     public function detail(Request $request)
     {

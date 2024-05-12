@@ -285,10 +285,12 @@
             @endif
 
             @if (Auth::user()->hasRole('pimpinan'))
-                <details class="group [&_summary::-webkit-details-marker]:hidden">
-                    <summary
-                        class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700">
-                        <span class="text-sm font-medium"> {{ __('Rapat') }} </span>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
+                {{ __('Home') }}
+            </x-responsive-nav-link>
+            <details class="group [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700">
+                    <span class="text-sm font-medium"> {{ __('Rapat') }} </span>
 
                         <span class="shrink-0 transition duration-300 group-open:-rotate-180">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -314,10 +316,12 @@
                 </x-responsive-nav-link>
             @endif
             @if (Auth::user()->hasRole('keuangan'))
-                <details class="group [&_summary::-webkit-details-marker]:hidden">
-                    <summary
-                        class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700">
-                        <span class="text-sm font-medium"> {{ __('Honor') }} </span>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
+                {{ __('Home') }}
+            </x-responsive-nav-link>
+            <details class="group [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700">
+                    <span class="text-sm font-medium"> {{ __('Honor') }} </span>
 
                         <span class="shrink-0 transition duration-300 group-open:-rotate-180">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -340,7 +344,10 @@
                 </details>
             @endif
             @if (Auth::user()->hasRole('anggota'))
-                <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')" class="text-slate-50">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
+                {{ __('Home') }}
+            </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('list.honor.dasar.pribadi')" :active="request()->routeIs('list.honor.dasar.pribadi')"  class="text-slate-50">
                     {{ __('Honor Dasar Pribadi') }}
                 </x-responsive-nav-link>
             @endif

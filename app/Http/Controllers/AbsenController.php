@@ -21,8 +21,11 @@ class AbsenController extends Controller
             $senat = Senat::where('id_komisi', $id_komisi)->get();
         }
         $rapat = Rapat::where('kode_unik', $kode_unik)->first();
+
         // Lakukan sesuatu dengan kode unik yang diterima
-        return view('content.absen.absen', ['rapat' => $rapat, 'senats' => $senat,'id_komisi'=>$id_komisi]);
+        $kehadiran = Kehadiran::where('id_rapat', $rapat->id)->pluck('id_senat')->toArray();
+
+        return view('content.absen.absen', ['rapat' => $rapat, 'senats' => $senat,'id_komisi'=>$id_komisi, 'kehadiran' => $kehadiran]);
     }
 
     public function kehadiran(Request $request)
@@ -41,18 +44,17 @@ class AbsenController extends Controller
 
         // Periksa apakah kata sandi yang diberikan sama dengan kata sandi pengguna
         if (Hash::check($request->password, $user->password)) {
-            // Periksa apakah id_senat sudah ada dalam tabel Kehadiran
-            if (Kehadiran::where(['id_senat'=> $request->id_senat ,'id_rapat'=>$request->id_rapat])->exists()) {
-                return redirect()->back()->with('error','Kehadiran Sudah Dicatat Sebelumnya');
-            }
 
-            // Jika cocok, buat kehadiran
-            Kehadiran::create([
+        // Periksa apakah id_senat sudah ada dalam tabel Kehadiran
+
+        // Jika cocok, buat kehadiran
+        Kehadiran::create([
                 'id_rapat' => $rapat->id,
                 'id_senat' => $request->id_senat,
                 'waktu' => now(),
                 'verifikasi' => 'Absen'
-            ]);
+        ]);
+        
             return redirect()->back()->with('success','Berhasil Absen');
         } else {
             // Jika kata sandi tidak cocok, kembalikan respon dengan kesalahan
