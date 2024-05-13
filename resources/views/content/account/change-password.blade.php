@@ -26,7 +26,7 @@
         <div id="right" class="bg-[#EBE9EE] col-span-2 rounded-lg p-6">
             <h1 class="text-2xl font-bold capitalize">Ubah Kata Sandi</h1>
             <div class="w-full h-[2px] bg-[#666] my-4"></div>
-            <form method="POST" action="{{ route('change.password') }}" class="space-y-6">
+            <form id="passwordForm" method="POST" action="{{ route('change.password') }}" class="space-y-6">
                 @csrf
                 <!-- Current Password -->
                 <div>
@@ -58,4 +58,22 @@
             </form>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Tangani submit formulir
+            document.getElementById('passwordForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Sukses!',
+                    text: 'Kata sandi berhasil diubah.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "{{ route('account.detail') }}"; // Rute ke dashboard
+                });
+            });
+        });
+    </script>
 @endsection
