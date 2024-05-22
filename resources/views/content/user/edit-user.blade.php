@@ -28,7 +28,7 @@
                 </div>
                 <div class="relative">
                     <label class="block text-xs font-semibold text-gray-900">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Password" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" />
+                    <input type="password" id="password" name="password" placeholder="Password" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm " />
                     <span class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" onclick="togglePasswordVisibility('password', 'togglePasswordIcon')">
                         <i id="togglePasswordIcon" class="far fa-eye text-gray-500"></i>
                     </span>

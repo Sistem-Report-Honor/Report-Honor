@@ -98,6 +98,7 @@ class AdminController extends Controller
 
     // Validasi input dari request
     $request->validate([
+        'username' => 'required|unique:users',
         'name' => 'required|min:3',
         'nip' => 'nullable|string|max:18|unique:senat,nip,'.$user->senat->id,
         'NPWP' => 'nullable|string|max:18|unique:senat,NPWP,'.$user->senat->id,
@@ -111,11 +112,11 @@ class AdminController extends Controller
     ]);
 
     // Perbarui data pada record pengguna (user) jika ada
-    $user->update($request->only('name'));
+    $user->update($request->only('name', 'username'));
 
     // Perbarui data pada record Senat jika ada
     if ($user->senat) {
-        $user->senat->update($request->only('name', 'nip', 'no_rek', 'nama_rekening', 'id_golongan', 'id_komisi', 'jabatan', 'NPWP'));
+        $user->senat->update($request->only('username', 'name', 'nip', 'no_rek', 'nama_rekening', 'id_golongan', 'id_komisi', 'jabatan', 'NPWP'));
     }
 
     // Perbarui password jika diberikan

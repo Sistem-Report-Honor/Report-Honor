@@ -78,7 +78,6 @@ class AbsenController extends Controller
             }
         }
         
-    
         // Handle jika status tidak valid
     
         return redirect()->back()->with('error', 'Status tidak valid');
