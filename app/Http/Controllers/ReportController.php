@@ -31,29 +31,29 @@ class ReportController extends Controller
             ->whereYear('waktu', $year)
             ->get();
 
-        // Menghitung jumlah kehadiran untuk setiap anggota rapat
-        $jumlahKehadiran = [];
-        foreach ($senats as $senat) {
-            // Menghitung jumlah kehadiran berdasarkan id senat
-            $jumlahKehadiran[$senat->id] = $kehadirans->where('id_senat', $senat->id)->count();
-        }
-
-        // Menghitung honorarium untuk setiap anggota senat
-        $honorariumsPerSenat = [];
-        foreach ($senats as $senat) {
-            $golongan = $senat->golongan;
-            if ($golongan) {
-                $honorarium = $golongan->honor;
-                $pph = $golongan->pph;
-                $honorariumsPerSenat[$senat->id] = ($honorarium - $pph) * ($jumlahKehadiran[$senat->id] ?? 0);
-            } else {
-                // Atur nilai honorarium menjadi 0 jika golongan tidak ditemukan
-                $honorariumsPerSenat[$senat->id] = 0;
-            }
-        }
-
-        return $honorariumsPerSenat;
+    // Menghitung jumlah kehadiran untuk setiap anggota rapat
+    $jumlahKehadiran = [];
+    foreach ($senats as $senat) {
+        // Menghitung jumlah kehadiran berdasarkan id senat
+        $jumlahKehadiran[$senat->id] = $kehadirans->where('id_senat', $senat->id)->count();
     }
+
+    // Menghitung honorarium untuk setiap anggota senat
+    $honorariumsPerSenat = [];
+    foreach ($senats as $senat) {
+        $golongan = $senat->golongan;
+        if ($golongan) {
+            $honorarium = $golongan->honor;
+            $pph = $golongan->pph;
+            $honorariumsPerSenat[$senat->id] = ($honorarium - $pph) * ($jumlahKehadiran[$senat->id] ?? 0);
+        } else {
+            // Atur nilai honorarium menjadi 0 jika golongan tidak ditemukan
+            $honorariumsPerSenat[$senat->id] = 0;
+        }
+    }
+
+    return $honorariumsPerSenat;
+}
 
     public function reportDasar(Request $request)
     {
@@ -79,27 +79,27 @@ class ReportController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Header kolom
-        $sheet->setCellValue('A1', 'No.');
-        $sheet->setCellValue('B1', 'Nomor Rekening');
-        $sheet->setCellValue('C1', 'Nama Rekening');
-        $sheet->setCellValue('D1', 'Honorarium');
+    // Header kolom
+    $sheet->setCellValue('A1', 'No.');
+    $sheet->setCellValue('B1', 'Nomor Rekening');
+    $sheet->setCellValue('C1', 'Nama Rekening');
+    $sheet->setCellValue('D1', 'Honorarium');
 
-        // Mendapatkan data Senat
-        $senats = Senat::with(['user', 'golongan'])->get();
+    // Mendapatkan data Senat
+    $senats = Senat::with(['user', 'golongan'])->get();
 
         // Menghitung honorariums
         $honorariumsPerSenat = $this->calculateHonorariums($senats, $month, $year);
 
-        // Mendefinisikan style untuk header
-        $headerStyle = [
-            'font' => ['bold' => true],
-            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
-            'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => 'CCCCCC']],
-        ];
+    // Mendefinisikan style untuk header
+    $headerStyle = [
+        'font' => ['bold' => true],
+        'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+        'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => 'CCCCCC']],
+    ];
 
-        // Terapkan style pada header
-        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+    // Terapkan style pada header
+    $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
 
         // Mendefinisikan lebar kolom dan style border untuk setiap kolom
         $columnWidths = [10, 30, 30, 15]; // Lebar kolom dalam satuan karakter
@@ -119,13 +119,13 @@ class ReportController extends Controller
             $sheet->setCellValue('C' . $row, $senat->nama_rekening);
             $sheet->setCellValue('D' . $row, isset($honorariumsPerSenat[$senat->id]) ? $honorariumsPerSenat[$senat->id] : 'N/A');
 
-            // Terapkan style border untuk setiap sel pada baris ini
-            foreach (range('A', 'D') as $column) {
-                $sheet->getStyle($column . $row)->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]]]);
-            }
-
-            $row++;
+        // Terapkan style border untuk setiap sel pada baris ini
+        foreach (range('A', 'D') as $column) {
+            $sheet->getStyle($column . $row)->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]]]);
         }
+
+        $row++;
+    }
 
         // Menyimpan file Excel dan mengembalikan response untuk diunduh
         $writer = new Xlsx($spreadsheet);
@@ -153,14 +153,14 @@ class ReportController extends Controller
         $honors = $reportData['honors'];
         $pphs = $reportData['pphs'];
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'No.');
-        $sheet->setCellValue('B1', 'Nama');
-        $sheet->setCellValue('C1', 'GP');
-        $sheet->setCellValue('D1', 'Jabatan dalam Senat');
-        $sheet->setCellValue('E1', 'Komisi');
+            $sheet->setCellValue('A1', 'No.');
+            $sheet->setCellValue('B1', 'Nama');
+            $sheet->setCellValue('C1', 'GP');
+            $sheet->setCellValue('D1', 'Jabatan dalam Senat');
+            $sheet->setCellValue('E1', 'Komisi');
 
         $columnIndex = 6;
         foreach ($rapats as $rapat) {
@@ -200,23 +200,23 @@ class ReportController extends Controller
             $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $senat->jabatan);
             $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $senat->komisi->komisi);
 
-            foreach ($rapats as $rapat) {
-                $senat_id = $senat->id;
-                $rapat_id = $rapat->id;
-                $is_kehadiran = isset($kehadirans[$senat_id][$rapat_id]) ? $kehadirans[$senat_id][$rapat_id] : false;
-                if ($is_kehadiran) {
-                    $honorarium = isset($senat->golongan) ? $senat->golongan->honor : '-';
-                    $pph = isset($senat->golongan) ? $senat->golongan->pph : '-';
-                    $diterima = isset($honorariumsPerRapat[$rapat_id]) ? $honorariumsPerRapat[$rapat_id] : 'N/A';
-                } else {
-                    $honorarium = '-';
-                    $pph = '-';
-                    $diterima = '-';
+                foreach ($rapats as $rapat) {
+                    $senat_id = $senat->id;
+                    $rapat_id = $rapat->id;
+                    $is_kehadiran = isset($kehadirans[$senat_id][$rapat_id]) ? $kehadirans[$senat_id][$rapat_id] : false;
+                    if ($is_kehadiran) {
+                        $honorarium = isset($senat->golongan) ? $senat->golongan->honor : '-';
+                        $pph = isset($senat->golongan) ? $senat->golongan->pph : '-';
+                        $diterima = isset($honorariumsPerRapat[$rapat_id]) ? $honorariumsPerRapat[$rapat_id] : 'N/A';
+                    } else {
+                        $honorarium = '-';
+                        $pph = '-';
+                        $diterima = '-';
+                    }
+                    $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $honorarium);
+                    $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $pph);
+                    $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $diterima);
                 }
-                $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $honorarium);
-                $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $pph);
-                $sheet->setCellValueByColumnAndRow($columnIndex++, $row, $diterima);
-            }
 
             $sheet->setCellValueByColumnAndRow($totalHonorColumnIndex, $row, isset($honors[$senat->id]) ? $honors[$senat->id] : 'N/A');
             $sheet->setCellValueByColumnAndRow($totalHonorColumnIndex + 1, $row, isset($pphs[$senat->id]) ? $pphs[$senat->id] : 'N/A');
@@ -238,13 +238,13 @@ class ReportController extends Controller
         // Set the width of the NPWP column to 40
         $sheet->getColumnDimensionByColumn($npwpColumnIndex)->setWidth(40);
 
-        $boldStyle = [
-            'font' => ['bold' => true],
-        ];
-        $sheet->getStyle('A1:' . $sheet->getHighestColumn() . '1')->applyFromArray($boldStyle);
-        $sheet->getStyle('F1:' . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($totalHonorColumnIndex + 2) . '1')->applyFromArray([
-            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
-        ]);
+            $boldStyle = [
+                'font' => ['bold' => true],
+            ];
+            $sheet->getStyle('A1:' . $sheet->getHighestColumn() . '1')->applyFromArray($boldStyle);
+            $sheet->getStyle('F1:' . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($totalHonorColumnIndex + 2) . '1')->applyFromArray([
+                'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            ]);
 
         $borderStyle = [
             'borders' => [
@@ -259,25 +259,25 @@ class ReportController extends Controller
         ];
         $sheet->getStyle('A1:' . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($totalHonorColumnIndex + 2) . '1')->applyFromArray($boldCenterStyle);
 
-        $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($npwpColumnIndex) . '1')->applyFromArray([
-            'font' => ['bold' => true],
-            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
-        ]);
+            $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($npwpColumnIndex) . '1')->applyFromArray([
+                'font' => ['bold' => true],
+                'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            ]);
 
         $sheet->getColumnDimensionByColumn($npwpColumnIndex)->setWidth(40); // Ensure the NPWP column width is set to 40
         $sheet->getStyle('A1:' . $sheet->getHighestColumn() . $sheet->getHighestRow())->applyFromArray($borderStyle);
 
         $excel_file_path = public_path('storage/ReportDetail/report_detail.xlsx');
 
-        if (!file_exists(dirname($excel_file_path))) {
-            mkdir(dirname($excel_file_path), 0755, true);
+            if (!file_exists(dirname($excel_file_path))) {
+                mkdir(dirname($excel_file_path), 0755, true);
+            }
+
+            $writer = new Xlsx($spreadsheet);
+            $writer->save($excel_file_path);
+
+            return response()->download($excel_file_path);
         }
-
-        $writer = new Xlsx($spreadsheet);
-        $writer->save($excel_file_path);
-
-        return response()->download($excel_file_path);
-    }
 
 
 
@@ -290,9 +290,14 @@ class ReportController extends Controller
         $tahun = $request->input('tahun', Carbon::now()->year);
 
         $rapats = Rapat::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->get();
+        $bulan = $request->input('bulan', Carbon::now()->month);
+        $tahun = $request->input('tahun', Carbon::now()->year);
+
+        $rapats = Rapat::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->get();
 
         // Dapatkan semua senat dengan relasi yang diperlukan
         $senats = Senat::with(['golongan', 'komisi'])->where('id', $id_senat)->get();
+
 
 
 
@@ -379,6 +384,7 @@ class ReportController extends Controller
             $sheet->setCellValueByColumnAndRow($totalHonorColumnIndex + 2, $row, isset($honorariumsPerSenat[$senat->id]) ? $honorariumsPerSenat[$senat->id] : 'N/A');
 
             $sheet->setCellValueExplicitByColumnAndRow($npwpColumnIndex, $row, $senat->NPWP, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValueExplicitByColumnAndRow($npwpColumnIndex, $row, $senat->NPWP, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
             $row++;
         }
@@ -388,6 +394,7 @@ class ReportController extends Controller
         $sheet->getColumnDimension('B')->setWidth(15); // GP
         $sheet->getColumnDimension('C')->setWidth(20); // Jabatan dalam Senat
         $sheet->getColumnDimension('D')->setWidth(20); // Komisi
+        $sheet->getColumnDimensionByColumn($npwpColumnIndex)->setWidth(40);
         $sheet->getColumnDimensionByColumn($npwpColumnIndex)->setWidth(40);
         // Set text style for column headers
         $boldCenterStyle = [
@@ -497,7 +504,9 @@ class ReportController extends Controller
 
         $bulan = $request->input('bulan', Carbon::now()->month);
         $tahun = $request->input('tahun', Carbon::now()->year);
+        $tahun = $request->input('tahun', Carbon::now()->year);
 
+        $rapats = Rapat::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->get();
         $rapats = Rapat::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->get();
 
         $reportData = $this->generateReport($senats, $rapats);
@@ -507,8 +516,10 @@ class ReportController extends Controller
             'rapats' => $rapats,
             'bulan' => $bulan,
             'tahun' => $tahun,
+            'tahun' => $tahun,
         ]));
     }
+
 
 
     public function reportPribadi(Request $request)
@@ -522,7 +533,9 @@ class ReportController extends Controller
 
         $bulan = $request->input('bulan', Carbon::now()->month);
         $tahun = $request->input('tahun', Carbon::now()->year);
+        $tahun = $request->input('tahun', Carbon::now()->year);
 
+        $rapats = Rapat::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->get();
         $rapats = Rapat::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->get();
 
         $reportData = $this->generateReport([$senat], $rapats);
@@ -532,6 +545,7 @@ class ReportController extends Controller
             'senat' => $senat,
             'rapats' => $rapats,
             'bulan' => $bulan,
+            'tahun' => $tahun,
             'tahun' => $tahun,
         ]));
     }
