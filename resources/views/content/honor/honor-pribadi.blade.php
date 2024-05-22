@@ -5,18 +5,28 @@
     <h1 class="text-3xl font-semibold mb-10">Report Honor Pribadi</h1>
 <div class="flex justify-end mb-4">
     <form action="{{ route('list.honor.dasar.pribadi') }}" method="GET">
-        <label for="bulan" class="mr-2">Bulan:</label>
-        <select name="bulan" id="bulan" class="px-2 py-1 border border-gray-300 rounded-md">
+        <label for="bulan" class="mr-2">Pilih Bulan:</label>
+        <select name="bulan" id="bulan" class="border rounded-md px-2 py-1">
             @for ($i = 1; $i <= 12; $i++)
                 <option value="{{ $i }}" {{ $bulan == $i ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $i, 1)) }}</option>
             @endfor
         </select>
+
+        <label for="tahun" class="mr-2 ml-4">Pilih Tahun:</label>
+        <select name="tahun" id="tahun" class="border rounded-md px-2 py-1">
+            @for ($i = date('Y'); $i >= 2010; $i--)
+                <option value="{{ $i }}" {{ $tahun == $i ? 'selected' : '' }}>{{ $i }}</option>
+            @endfor
+        </select>
+
         <button type="submit" class="inline-block rounded-md bg-[#6E2BB1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">Filter</button>
     </form>
 </div>
-    <div class="flex justify-end">
-        <a href="{{ route('print.honor.detail') }}" class="inline-block rounded-md bg-[#6E2BB1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">Print Report</a>
-    </div>
+<form action="{{ route('print.honor.pribadi') }}" method="GET">
+    <input type="hidden" name="bulan" value="{{ $bulan }}">
+    <input type="hidden" name="tahun" value="{{ $tahun }}">
+    <button type="submit" class="inline-block rounded-md bg-[#6E2BB1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#8b3ce1] transition-all">Print Report</button>
+</form>
 <div class="overflow-x-auto">
     <table id="my-datatable" class="text-sm bg-[#EBE9EE] rounded-lg">
         <thead>

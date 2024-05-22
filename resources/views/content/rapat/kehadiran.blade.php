@@ -62,7 +62,6 @@
         <p class="basis-1/8 text-sm font-medium text-gray-700"><span id="selected-count">0</span> item dipilih</p>
         <div class="mt-2">
             @if ($rapat != null)
-            @if ($rapat->rapat->status != 'selesai')
             <form id="verifyForm" action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST"
                 class="flex items-center gap-2">
                 @csrf
@@ -81,7 +80,6 @@
                     </button>
                 </div>
             </form>
-            @endif
             @endif
         </div>
     </div>
