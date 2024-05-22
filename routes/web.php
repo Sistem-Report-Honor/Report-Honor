@@ -7,6 +7,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CobaController;
 use App\Http\Controllers\RapatController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GolonganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,13 +29,8 @@ Route::get('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'absen'])-
 Route::post('/absen/{kode_unik}/{id_komisi}', [AbsenController::class, 'kehadiran'])->name('hadir');
 
 Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(function () {
-    Route::get('/', function () {
-        return view('content.dashboard');
-    });
-    Route::get('/dashboard', function () {
-        return view('content.dashboard');
-    })->name('dashboard');
-
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/user/table', [AdminController::class, 'table'])->middleware(['role:admin'])->name('table.user');
     Route::get('/user/form', [AdminController::class, 'form'])->middleware(['role:admin'])->name('form.user');
     Route::post('/user/form/create', [AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
@@ -60,6 +56,13 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/honor/dasar/pribadi/print-report', [ReportController::class, 'printReportPribadi'])->middleware(['role:pimpinan|anggota'])->name('print.honor.pribadi');
 
     // Route::get('/absen/user', [UserController::class, 'kehadiran'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
+
+    Route::get('/golongan', [GolonganController::class, 'index'])->middleware(['role:admin|keuangan'])->name('golongan.index');
+    Route::get('/golongan/create', [GolonganController::class, 'create'])->name('golongan.create');
+    Route::post('/golongan/store', [GolonganController::class, 'store'])->middleware(['role:admin|keuangan'])->name('golongan.store');
+    Route::get('/golongan/{id}/edit', [GolonganController::class, 'edit'])->middleware(['role:admin|keuangan'])->name('golongan.edit');
+    Route::put('/golongan/{id}/update', [GolonganController::class, 'update'])->middleware(['role:admin|keuangan'])->name('golongan.update');
+    Route::delete('/golongan/{id}/destroy', [GolonganController::class, 'destroy'])->name('golongan.destroy');
 
     Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
 

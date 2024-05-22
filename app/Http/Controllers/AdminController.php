@@ -92,36 +92,43 @@ class AdminController extends Controller
 
 
     public function update(Request $request, $id)
-    {
-        
-        // Cari record pengguna (user) berdasarkan ID
-        $user = User::findOrFail($id);
-    
-        // Validasi input dari request
-        $request->validate([
-            'name' => 'required|min:3',
-            'nip' => 'nullable|string|max:18|unique:senat,nip,'.$user->senat->id,
-            'NPWP' => 'nullable|string|max:18|unique:senat,NPWP,'.$user->senat->id,
-            'no_rek' => 'nullable|string|unique:senat,no_rek,'.$user->senat->id,
-            'nama_rekening' => 'nullable|string',
-            'id_golongan' => 'nullable|exists:golongan,id',
-            'id_komisi' => 'nullable|exists:komisi,id',
-            'jabatan' => 'nullable|string',
-            'role' => 'nullable|string',
-        ]);
-    
-        // Perbarui data pada record pengguna (user) jika ada
-        $user->update($request->only('name'));
-    
-        // Perbarui data pada record Senat jika ada
-        if ($user->senat) {
-            $user->senat->update($request->only('name', 'nip', 'no_rek', 'nama_rekening', 'id_golongan', 'id_komisi', 'jabatan', 'NPWP'));
-        }
-    
-        // Redirect atau lakukan tindakan lainnya setelah berhasil memperbarui record
-        return redirect('content/user/table-user')->with('success', 'User berhasil diperbarui.');
+{
+    // Cari record pengguna (user) berdasarkan ID
+    $user = User::findOrFail($id);
+
+    // Validasi input dari request
+    $request->validate([
+        'username' => 'required|unique:users',
+        'name' => 'required|min:3',
+        'nip' => 'nullable|string|max:18|unique:senat,nip,'.$user->senat->id,
+        'NPWP' => 'nullable|string|max:18|unique:senat,NPWP,'.$user->senat->id,
+        'no_rek' => 'nullable|string|unique:senat,no_rek,'.$user->senat->id,
+        'nama_rekening' => 'nullable|string',
+        'id_golongan' => 'nullable|exists:golongan,id',
+        'id_komisi' => 'nullable|exists:komisi,id',
+        'jabatan' => 'nullable|string',
+        'role' => 'nullable|string',
+        'password' => 'nullable|confirmed|min:8', // Validasi password dan konfirmasi
+    ]);
+
+    // Perbarui data pada record pengguna (user) jika ada
+    $user->update($request->only('name', 'username'));
+
+    // Perbarui data pada record Senat jika ada
+    if ($user->senat) {
+        $user->senat->update($request->only('username', 'name', 'nip', 'no_rek', 'nama_rekening', 'id_golongan', 'id_komisi', 'jabatan', 'NPWP'));
     }
-    
+
+    // Perbarui password jika diberikan
+    if ($request->filled('password')) {
+        $user->update(['password' => Hash::make($request->password)]);
+    }
+
+    // Mengembalikan respon JSON
+    return response()->json(['success' => true, 'message' => 'User berhasil diperbarui.']);
+}
+
+
 
     public function delete($id)
     {
@@ -130,7 +137,7 @@ class AdminController extends Controller
         if (!$user || !$senat) {
             return response()->json(['message' => 'Data not found'], 404);
         }
-        
+
         $user->delete();
         $senat->delete();
 
