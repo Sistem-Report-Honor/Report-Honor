@@ -98,11 +98,11 @@ class AdminController extends Controller
 
     // Validasi input dari request
     $request->validate([
-        'username' => 'required|unique:users',
+        'username' => 'required|unique:users,username,' . $user->id,
         'name' => 'required|min:3',
-        'nip' => 'nullable|string|max:18|unique:senat,nip,'.$user->senat->id,
-        'NPWP' => 'nullable|string|max:18|unique:senat,NPWP,'.$user->senat->id,
-        'no_rek' => 'nullable|string|unique:senat,no_rek,'.$user->senat->id,
+        'nip' => 'nullable|string|max:18|unique:senat,nip,' . $user->senat->id,
+        'NPWP' => 'nullable|string|max:18|unique:senat,NPWP,' . $user->senat->id,
+        'no_rek' => 'nullable|string|unique:senat,no_rek,' . $user->senat->id,
         'nama_rekening' => 'nullable|string',
         'id_golongan' => 'nullable|exists:golongan,id',
         'id_komisi' => 'nullable|exists:komisi,id',
@@ -116,7 +116,7 @@ class AdminController extends Controller
 
     // Perbarui data pada record Senat jika ada
     if ($user->senat) {
-        $user->senat->update($request->only('username', 'name', 'nip', 'no_rek', 'nama_rekening', 'id_golongan', 'id_komisi', 'jabatan', 'NPWP'));
+        $user->senat->update($request->only('nip', 'no_rek', 'nama_rekening', 'id_golongan', 'id_komisi', 'jabatan', 'NPWP'));
     }
 
     // Perbarui password jika diberikan
@@ -127,6 +127,7 @@ class AdminController extends Controller
     // Mengembalikan respon JSON
     return response()->json(['success' => true, 'message' => 'User berhasil diperbarui.']);
 }
+
 
 
 
@@ -142,5 +143,17 @@ class AdminController extends Controller
         $senat->delete();
 
         return redirect()->back()->with('success', 'Data berhasil dihapus.');
+    }
+         public function dashboard()
+    {
+        $senatCount = Senat::count();
+        $rapatSelesaiCount = Rapat::where('status', 'selesai')->count();
+        $rapatMulai = Rapat::where('status', 'mulai')->get(['id_komisi', 'tanggal', 'jam']);
+
+        return view('content.dashboard', [
+            'senatCount' => $senatCount,
+            'rapatSelesaiCount' => $rapatSelesaiCount,
+            'rapatMulai' => $rapatMulai,
+        ]);
     }
 }
