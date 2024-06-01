@@ -35,41 +35,41 @@ class RapatController extends Controller
         return view('content.rapat.form-rapat', ['komisis' => $komisi]);
     }
 
-    public function create(Request $request)
-    {
-        $request->validate([
-            'tanggal' => 'required|date',
-            'jam' => 'required',
-        ]);
-        $kode_unik = uniqid();
-        $url = route('absen', ['kode_unik' => $kode_unik, 'id_komisi' => $request->id_komisi]);
+        public function create(Request $request)
+        {
+            $request->validate([
+                'tanggal' => 'required|date',
+                'jam' => 'required',
+            ]);
+            $kode_unik = uniqid();
+            $url = route('absen', ['kode_unik' => $kode_unik, 'id_komisi' => $request->id_komisi]);
 
-        // Nama file untuk menyimpan QR code
-        $filename = $request->id_komisi . '-' . $kode_unik . '.png';
-        $filename = str_replace(' ', '-', $filename);
-        $filepath = 'QRCode/' . $filename;
-        // Membuat QR code
-        QRCode::url($url . '?code=' . $kode_unik . '&komisi=' . $request->id_komisi)
-            ->setSize(8)
-            ->setMargin(2)
-            ->setOutfile(storage_path('app/public/' . $filepath))
-            ->png();
+            // Nama file untuk menyimpan QR code
+            $filename = $request->id_komisi . '-' . $kode_unik . '.png';
+            $filename = str_replace(' ', '-', $filename);
+            $filepath = 'QRCode/' . $filename;
+            // Membuat QR code
+            QRCode::url($url . '?code=' . $kode_unik . '&komisi=' . $request->id_komisi)
+                ->setSize(8)
+                ->setMargin(2)
+                ->setOutfile(storage_path('app/public/' . $filepath))
+                ->png();
 
-        $waktu = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal . ' ' . $request->jam);
-        $expirationTime = $waktu->addDay(); // Menambah satu hari
+            $waktu = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal . ' ' . $request->jam);
+            $expirationTime = $waktu->addDay(); // Menambah satu hari
 
 
-        $rapat = Rapat::create([
-            'id_komisi' => $request->id_komisi,
-            'kode_unik' => $kode_unik,
-            'tanggal' => $request->tanggal,
-            'jam' => $request->jam,
-            'qr_code' =>  $filepath,
-            'status' => 'prepare',
-            'time_expired' => $expirationTime,
-        ]);
-        return redirect()->back()->with('success', 'Rapat berhasil Dibuat.');
-    }
+            $rapat = Rapat::create([
+                'id_komisi' => $request->id_komisi,
+                'kode_unik' => $kode_unik,
+                'tanggal' => $request->tanggal,
+                'jam' => $request->jam,
+                'qr_code' =>  $filepath,
+                'status' => 'prepare',
+                'time_expired' => $expirationTime,
+            ]);
+            return redirect()->back()->with('success', 'Rapat berhasil Dibuat.');
+        }
 
     public function kehadiran($id)
     {

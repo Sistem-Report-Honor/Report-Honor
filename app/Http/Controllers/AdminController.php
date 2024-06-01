@@ -142,4 +142,18 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Data berhasil dihapus.');
     }
+
+
+    public function dashboard()
+    {
+        $senatCount = Senat::count();
+        $rapatSelesaiCount = Rapat::where('status', 'selesai')->count();
+        $rapatMulai = Rapat::where('status', 'mulai')->get(['id_komisi', 'tanggal', 'jam']);
+
+        return view('content.dashboard', [
+            'senatCount' => $senatCount,
+            'rapatSelesaiCount' => $rapatSelesaiCount,
+            'rapatMulai' => $rapatMulai,
+        ]);
+    }
 }

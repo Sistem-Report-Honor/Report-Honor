@@ -92,7 +92,7 @@
                                     @endif
                                 </div>
 
-                                <a href="{{ route('generate-pdf', $rapat->id) }}" target="_blank" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Print QR Code</a>
+                                <a href="{{ route('generate-pdf', $rapat->id) }}" target="_blank" class="mt-2 w-full flex items-center justify-center gap-2 hover:gap-2.5 rounded-md bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-500 transition-all">Print QR Code</a>
                             </div>
                         </div>
                     @endforeach
