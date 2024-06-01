@@ -207,9 +207,7 @@
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    onclick="event.preventDefault();
+                                <x-dropdown-link :href="route('logout')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="event.preventDefault();
                                 this.closest('form').submit();">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
@@ -221,14 +219,10 @@
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -247,15 +241,12 @@
                         class="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-white hover:bg-white/10">
                         <span class="text-sm font-medium"> {{ __('Rapat') }} </span>
 
-                        <span class="shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                    </summary>
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </summary>
 
                     <ul class="mt-2 space-y-1 px-4">
                         <x-responsive-nav-link :href="route('list.rapat')" :active="request()->routeIs('list.rapat')" class="text-slate-50">
@@ -271,15 +262,12 @@
                         class="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-white hover:bg-white/10">
                         <span class="text-sm font-medium"> {{ __('Laporan') }} </span>
 
-                        <span class="shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                    </summary>
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </summary>
 
                     <ul class="mt-2 space-y-1 px-4">
                         <x-responsive-nav-link :href="route('list.honor.detail')" :active="request()->routeIs('list.honor.detail')" class="text-slate-50">
@@ -298,15 +286,12 @@
                         class="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-white hover:bg-white/10">
                         <span class="text-sm font-medium"> {{ __('User') }} </span>
 
-                        <span class="shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                    </summary>
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </summary>
 
                     <ul class="mt-2 space-y-1 px-4">
                         <x-responsive-nav-link :href="route('table.user')" :active="request()->routeIs('table.user')" class="text-slate-50">
@@ -328,15 +313,12 @@
                         class="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-white hover:bg-white/10">
                         <span class="text-sm font-medium"> {{ __('Rapat') }} </span>
 
-                        <span class="shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                    </summary>
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </summary>
 
                     <ul class="mt-2 space-y-1 px-4">
                         <x-responsive-nav-link :href="route('list.rapat')" :active="request()->routeIs('list.rapat')" class="text-slate-50">
@@ -357,15 +339,12 @@
                         class="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-white hover:bg-white/10">
                         <span class="text-sm font-medium"> {{ __('Laporan') }} </span>
 
-                        <span class="shrink-0 transition duration-300 group-open:-rotate-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                    </summary>
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </summary>
 
                     <ul class="mt-2 space-y-1 px-4">
                         <x-responsive-nav-link :href="route('list.honor.detail')" :active="request()->routeIs('list.honor.detail')" class="text-slate-50">
@@ -410,7 +389,20 @@
                 </x-responsive-nav-link>
             </ul>
         </details>
+            <ul class="mt-2 space-y-1 px-4">
+                <x-responsive-nav-link :href="route('account.detail')" :active="request()->routeIs('account.detail')" class="text-slate-50">
+                    {{ __('Informasi Pribadi') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('change.password')" :active="request()->routeIs('change.password')" class="text-slate-50">
+                    {{ __('Ubah Password') }}
+                </x-responsive-nav-link>
+            </ul>
+        </details>
 
+        <div class="mt-1 mb-2 space-y-1">
+            <!-- Authentication -->
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
         <div class="mt-1 mb-2 space-y-1">
             <!-- Authentication -->
             <form method="POST" action="{{ route('logout') }}">

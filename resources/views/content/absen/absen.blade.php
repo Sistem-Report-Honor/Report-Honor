@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row mb-0">
+                        <div class="form-group row mb-0 mt-3">
                         <div class="col-md-6 offset-md-4">
                             <button type="submit"
                                 class="text-sm md:text-md lg:text-md inline-block w-full min-w-56 rounded-lg bg-[#6E2BB1] hover:bg-[#8b3ce1] px-5 py-2 font-medium text-white sm:w-auto transition-all">
