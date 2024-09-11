@@ -13,19 +13,28 @@
 
         <form id="editUser" action="{{ route('edit.user.post', $user->id) }}" method="POST">
             @csrf
+            @method('PUT') <!-- This will spoof the PUT method -->
+            
             <div class="space-y-6">
+                <!-- NIP -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900">NIP</label>
-                    <input type="text" placeholder="NIP" name="nip" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" value="{{ $user->senat->nip }}" required />
+                    <input type="text" placeholder="NIP" name="nip" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" value="{{ $user->senat->nip }}" />
                 </div>
+
+                <!-- Nama Lengkap -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900">Nama Lengkap</label>
-                    <input type="text" placeholder="Nama Lengkap" name="name" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" value="{{ $user->senat->name }}" required />
+                    <input type="text" placeholder="Nama Lengkap" name="name" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" value="{{ $user->name }}" required />
                 </div>
+
+                <!-- Username -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900">Username</label>
                     <input type="text" placeholder="Username" name="username" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" value="{{ $user->username }}" required />
                 </div>
+
+                <!-- Password -->
                 <div class="relative">
                     <label class="block text-xs font-semibold text-gray-900">Password</label>
                     <input type="password" id="password" name="password" placeholder="Password" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm " />
@@ -34,7 +43,7 @@
                     </span>
                 </div>
 
-                <!-- Confirm Password Field -->
+                <!-- Confirm Password -->
                 <div class="relative">
                     <label class="block text-xs font-semibold text-gray-900">Confirm Password</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" />
@@ -42,6 +51,9 @@
                         <i id="toggleConfirmPasswordIcon" class="far fa-eye text-gray-500"></i>
                     </span>
                 </div>
+
+                <!-- Other Fields... -->
+                <!-- Golongan -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900">Golongan</label>
                     <div class="relative mt-2 text-sm">
@@ -53,17 +65,23 @@
                         @endforeach
                     </div>
                 </div>
+
+                <!-- NPWP -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900 mt-2" for="NPWP">NPWP</label>
-                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="NPWP" type="text" id="NPWP" name="NPWP" value="{{ $user->senat->NPWP }}" required />
+                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="NPWP" type="text" id="NPWP" name="NPWP" value="{{ $user->senat->NPWP }}" />
                 </div>
+
+                <!-- Jabatan -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900 mt-2" for="jabatan">Jabatan Senat</label>
-                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="Jabatan" type="text" id="jabatan" name="jabatan" value="{{ $user->senat->jabatan }}" required />
+                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="Jabatan" type="text" id="jabatan" name="jabatan" value="{{ $user->senat->jabatan }}" />
                 </div>
+
+                <!-- Komisi -->
                 <div>
                     <label for="id_komisi" class="block text-xs font-semibold text-gray-900 mt-2">Komisi</label>
-                    <select id="id_komisi" name="id_komisi" class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5" required>
+                    <select id="id_komisi" name="id_komisi" class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5">
                         @foreach ($komisi as $item)
                         @if ($item->id !== 4)
                         <option value="{{ $item->id }}" @if ($user->senat->id_komisi == $item->id) selected @endif>{{ $item->komisi }}</option>
@@ -71,17 +89,23 @@
                         @endforeach
                     </select>
                 </div>
+
+                <!-- No. Rek -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900 mt-2" for="no_rek">No. Rek</label>
-                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="No. Rek" type="text" id="no_rek" name="no_rek" value="{{ $user->senat->no_rek }}" required />
+                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="No. Rek" type="text" id="no_rek" name="no_rek" value="{{ $user->senat->no_rek }}" />
                 </div>
+
+                <!-- Nama Rekening -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900 mt-2" for="nama_rekening">Nama Rekening</label>
-                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="Nama Rekening" type="text" id="nama_rekening" name="nama_rekening" value="{{ $user->senat->nama_rekening }}" required />
+                    <input class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm" placeholder="Nama Rekening" type="text" id="nama_rekening" name="nama_rekening" value="{{ $user->senat->nama_rekening }}" />
                 </div>
+
+                <!-- Role -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-900 mt-2" for="role">Role</label>
-                    <select id="role" name="role" class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5" required>
+                    <select id="role" name="role" class="mt-2 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5">
                         @foreach ($role as $item)
                         <option value="{{ $item->name }}" @if ($user->getRoleNames()->first() == $item->name) selected @endif>{{ $item->name }}</option>
                         @endforeach
@@ -152,18 +176,19 @@
     });
 
     function togglePasswordVisibility(inputId, iconId) {
-    const input = document.getElementById(inputId);
-    const icon = document.getElementById(iconId);
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
 
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
     }
-}
-    </script>
+</script>
 @endsection
+

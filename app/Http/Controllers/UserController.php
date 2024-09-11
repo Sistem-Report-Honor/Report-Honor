@@ -19,34 +19,35 @@ class UserController extends Controller
     }
 
     public function passwordForm()
+{
+    return view('content.account.change-password');
+}
+
+public function changePassword(Request $request)
     {
-        return view('content.account.change-password');
-    }
-
-
-    public function changePassword(Request $request)
-    {
-
+        // Validate the request data
         $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|min:8|different:current_password',
             'confirm_password' => 'required|same:new_password',
         ]);
 
-        $userId = Auth::id();
-        $users = Auth::user();
-        $user = User::find($userId);
+        $user = Auth::user();
+
+        // Check if the current password matches
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->with('error', 'Kata sandi saat ini salah.');
+            return response()->json(['error' => 'Kata sandi saat ini salah.'], 400);
         }
 
+        // Update the user's password
         $user->update([
             'password' => Hash::make($request->new_password),
         ]);
 
-        return view('content.account.detail-account', ['user' => $users]);
-
+        return response()->json(['success' => 'Password berhasil diubah.']);
     }
+
+
 
 
     public function detail(Request $request)

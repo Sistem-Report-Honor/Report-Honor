@@ -26,8 +26,10 @@
                         required>
                         <option value="" selected>Pilih</option>
                         @foreach ($komisis as $komisi)
-                            <option value="{{ $komisi->id }}">{{ $komisi->komisi }}</option>
-                        @endforeach
+                                @if ($komisi->id != 5)
+                                    <option value="{{ $komisi->id }}">{{ $komisi->komisi }}</option>
+                                @endif
+                            @endforeach
                     </select>
                 </div>
             </div>
@@ -57,3 +59,4 @@
         });
     </script>
 @endsection
+
