@@ -8,8 +8,11 @@
             <thead>
                 <tr>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10">
-                      <input id="checkbox-select-all" type="checkbox"
-                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                        <div class="flex items-center">
+                            <input id="checkbox-all-search" type="checkbox"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="checkbox-all-search" class="px-2">All</label>
+                        </div>
                     </th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-10">No</th>
                     <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Nama Senat</th>
@@ -22,15 +25,14 @@
             </thead>
             @php
                 $counter = 1;
-                $allKehadiranIds = $kehadirans->pluck('id_senat')->toArray(); // Ambil semua ID kehadiran
             @endphp
             @foreach ($kehadirans as $kehadiran)
             <tr>
                 <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 border-b border-gray-400">
                     <div class="flex items-center">
                         <input id="checkbox-table-search-{{ $kehadiran->id_senat }}" type="checkbox"
-                               class="checkbox-kehadiran w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 "
-                               value="{{ $kehadiran->id_senat }}">
+                            class="checkbox-kehadiran w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                            value="{{ $kehadiran->id_senat }}">
                         <label for="checkbox-table-search-{{ $kehadiran->id_senat }}" class="sr-only">checkbox</label>
                     </div>
                 </td>
@@ -61,20 +63,19 @@
         <div class="mt-2">
             @if ($rapat != null)
             <form id="verifyForm" action="{{ route('verif.selected', [$rapat->id_rapat]) }}" method="POST"
-                  class="flex items-center gap-2">
+                class="flex items-center gap-2">
                 @csrf
                 <div class="">
                     <select name="status" id="status" required
-                            class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5">
+                        class="mt-1 w-full max-w-[55vw] rounded-md border border-gray-500 shadow-sm sm:text-sm py-2 px-2.5">
                         <option value="Hadir">Hadir</option>
                         <option value="Tidak Hadir">Tidak Hadir</option>
                     </select>
                     <input type="hidden" id="selected-senats" name="selected_senats" value="">
-                    <input type="hidden" id="all-senats" name="all_senats" value="{{ implode(',', $allKehadiranIds) }}">
                 </div>
                 <div class="mt-1">
                     <button type="submit" onclick="confirmVerify(event)"
-                            class="text-sm inline-block w-fit rounded-lg bg-[#6E2BB1] hover:bg-[#8b3ce1] px-10 py-2 font-medium text-white sm:w-auto transition-all">
+                        class="text-sm inline-block w-fit rounded-lg bg-[#6E2BB1] hover:bg-[#8b3ce1] px-10 py-2 font-medium text-white sm:w-auto transition-all">
                         Verify
                     </button>
                 </div>
@@ -83,7 +84,19 @@
         </div>
     </div>
     @endif
+    <div class="mt-4">
+        @if ($rapat != null)
+        <a href="{{ route('export.kehadiran', [$rapat->id_rapat]) }}"
+            class="text-sm inline-block w-fit rounded-lg bg-[#6E2BB1] hover:bg-[#8b3ce1] px-10 py-2 font-medium text-white sm:w-auto transition-all">
+            Print Kehadiran
+        </a>
+        @endif
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+
 <script>
     function confirmVerify(event) {
         event.preventDefault();
@@ -103,41 +116,36 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkboxAll = document.getElementById('checkbox-select-all');
-        const checkboxes = document.querySelectorAll('.checkbox-kehadiran');
+    $(document).ready(function () {
+        const table = $('#my-datatable').DataTable({
+            "paging": true,
+            "pageLength": 10,
+            "lengthMenu": [10, 25, 50, 100],
+            "order": [[1, 'asc']],
+        });
+
+        const checkboxAll = document.getElementById('checkbox-all-search');
         const selectedCountSpan = document.getElementById('selected-count');
         const selectedSenatsInput = document.getElementById('selected-senats');
-        const allSenatsInput = document.getElementById('all-senats');
 
         function updateSelectedCountAndSenats() {
-            const selectedSenats = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+            const selectedSenats = table.$('.checkbox-kehadiran:checked').map(function () {
+                return this.value;
+            }).get();
             selectedCountSpan.textContent = selectedSenats.length;
             selectedSenatsInput.value = selectedSenats.join(',');
         }
 
         checkboxAll.addEventListener('change', function() {
-            const allSenats = allSenatsInput.value.split(',');
-            const isChecked = checkboxAll.checked;
-
-            if (isChecked) {
-                // Set semua checkbox yang terlihat menjadi tercentang
-                checkboxes.forEach(checkbox => checkbox.checked = true);
-                selectedSenatsInput.value = allSenats.join(',');
-                selectedCountSpan.textContent = allSenats.length;
-            } else {
-                // Set semua checkbox yang terlihat menjadi tidak tercentang
-                checkboxes.forEach(checkbox => checkbox.checked = false);
-                selectedSenatsInput.value = '';
-                selectedCountSpan.textContent = 0;
-            }
+            const checkboxes = table.$('.checkbox-kehadiran');
+            checkboxes.prop('checked', checkboxAll.checked);
+            updateSelectedCountAndSenats();
         });
 
-        checkboxes.forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                updateSelectedCountAndSenats();
-            });
+        $('#my-datatable').on('change', '.checkbox-kehadiran', function() {
+            updateSelectedCountAndSenats();
         });
     });
 </script>
 @endsection
+

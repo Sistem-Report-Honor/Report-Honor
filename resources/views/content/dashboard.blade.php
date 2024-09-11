@@ -52,9 +52,10 @@
                         <p>{{ $rapat->tanggal }}</p>
                         <p>{{ $rapat->jam }}</p>
                     </div>
-                    <p class="mt-2.5">{{ $rapat->id_komisi->komisi }}</p>
+                    <p class="mt-2.5">{{ $rapat->komisi->komisi }}</p>
                 </div>
             @endforeach
         @endif
     </div>
 @endsection
+

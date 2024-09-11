@@ -66,7 +66,7 @@
                                 </a>
                                 <form id="deleteForm" action="{{ route('delete.user', $user->id) }}" method="POST">
                                     @csrf
-                                    @method('DELETE') <!-- Menentukan bahwa ini adalah metode DELETE -->
+                                    @method('DELETE')
                                     <button type="submit" onclick="confirmDelete(event)"
                                         class="inline-block rounded bg-[#c23c44] px-4 py-2 text-xs font-medium text-white hover:bg-[#d75c5d] transition-all">
                                         Delete
@@ -101,5 +101,4 @@
             });
         }
     </script>
-    
 @endsection

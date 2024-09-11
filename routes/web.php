@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AdminController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\GolonganController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
+
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -33,7 +35,7 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/user/form', [AdminController::class, 'form'])->middleware(['role:admin'])->name('form.user');
     Route::post('/user/form/create', [AdminController::class, 'create'])->middleware(['role:admin|pimpinan'])->name('post.user');
     Route::get('/user/table/edit/{id}', [AdminController::class, 'view'])->middleware(['role:admin'])->name('edit.user');
-    Route::post('/user/table/edit/{id}/post', [AdminController::class, 'update'])->middleware(['role:admin'])->name('edit.user.post');
+    Route::put('/user/table/edit/{id}/post', [AdminController::class, 'update'])->middleware(['role:admin'])->name('edit.user.post');
     Route::delete('/user/table/delete/{id}', [AdminController::class, 'delete'])->middleware(["role:admin"])->name("delete.user");
 
     Route::get('/rapat', [RapatController::class, 'table'])->middleware(['role:admin|pimpinan'])->name('list.rapat');
@@ -44,6 +46,9 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::post('/rapat/{id}/status/mulai', [RapatController::class, 'statusMulai'])->middleware('role:admin|pimpinan')->name('mulai');
     Route::post('/rapat/{id}/status/selesai', [RapatController::class, 'statusSelesai'])->middleware('role:admin|pimpinan')->name('selesai');
     Route::get('/rapat/{id}/generate-pdf', [RapatController::class, 'generatePDF'])->middleware('role:admin|pimpinan')->name('generate-pdf');
+    Route::delete('/rapat/{id}', [RapatController::class, 'delete'])->middleware('role:admin|pimpinan')->name('rapat.delete');
+    Route::get('/rapat/{id_rapat}/export-kehadiran', [AbsenController::class, 'exportKehadiran'])->name('export.kehadiran');
+
 
     Route::get('/honor/detail', [ReportController::class, 'reportDetail'])->middleware(['role:admin|keuangan'])->name('list.honor.detail');
     Route::get('/honor/dasar', [ReportController::class, 'reportDasar'])->middleware(['role:admin|keuangan'])->name('list.honor.dasar');
@@ -52,10 +57,6 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::get('/honor/dasar/pribadi', [ReportController::class, 'reportPribadi'])->middleware(['role:pimpinan|anggota'])->name('list.honor.dasar.pribadi');
     Route::get('/honor/dasar/pribadi/print-report', [ReportController::class, 'printReportPribadi'])->middleware(['role:pimpinan|anggota'])->name('print.honor.pribadi');
 
-    // Tambahkan rute untuk kehadiran senat dan laporan kehadiran
-    Route::get('/kehadiran', [ReportController::class, 'KehadiranSenat'])->middleware(['role:admin|keuangan'])->name('kehadiran.index');
-    Route::get('/kehadiran/export', [ReportController::class, 'Printkehadiran'])->middleware(['role:admin|keuangan'])->name('kehadiran.export');
-
     // Route::get('/absen/user', [UserController::class, 'kehadiran'])->middleware('role:anggota|pimpinan')->name('kehadiran.user');
 
     Route::get('/golongan', [GolonganController::class, 'index'])->middleware(['role:admin|keuangan'])->name('golongan.index');
@@ -63,13 +64,17 @@ Route::middleware(['auth', 'role:admin|pimpinan|keuangan|anggota'])->group(funct
     Route::post('/golongan/store', [GolonganController::class, 'store'])->middleware(['role:admin|keuangan'])->name('golongan.store');
     Route::get('/golongan/{id}/edit', [GolonganController::class, 'edit'])->middleware(['role:admin|keuangan'])->name('golongan.edit');
     Route::put('/golongan/{id}/update', [GolonganController::class, 'update'])->middleware(['role:admin|keuangan'])->name('golongan.update');
-    Route::delete('/golongan/{id}/destroy', [GolonganController::class, 'destroy'])->name('golongan.destroy');
-
-    Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
-
+    Route::delete('/golongan/{id}/destroy', [GolonganController::class, 'destroy'])->middleware(['role:admin|keuangan'])->name('golongan.destroy');
+    
+    // Tambahkan rute untuk kehadiran senat dan laporan kehadiran
+    Route::get('/kehadiran', [ReportController::class, 'KehadiranSenat'])->middleware(['role:admin|keuangan'])->name('kehadiran.index');
+    Route::get('/kehadiran/export', [ReportController::class, 'Printkehadiran'])->middleware(['role:admin|keuangan'])->name('kehadiran.export');
+ 
     Route::get('/account/change_password', [UserController::class, 'passwordForm'])->name('change.password.form');
-
     Route::post('/account/change_password', [UserController::class, 'changePassword'])->name('change.password');
+    Route::get('/account/detail', [UserController::class, 'detail'])->name('account.detail');
 });
 
+
 require __DIR__ . '/auth.php';
+
